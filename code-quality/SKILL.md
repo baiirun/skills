@@ -33,39 +33,54 @@ For a broad review, inspect the changed code, choose the relevant specialist dim
 
 1. Determine which quality dimensions apply to the task or diff.
 2. Run one focused read-only subagent per relevant specialist skill. Subagents must load and apply their assigned specialist skill themselves.
-3. Ask each specialist subagent to confirm the specialist skill it used, then return prioritized findings with concrete file and line references.
+3. Ask each specialist subagent to confirm the specialist skill it used, then return prioritized findings with concrete file and line references, evidence, and the specific heuristic used for each finding.
 4. If subagents are unavailable, stop and report that `code-quality` could not be completed.
 5. Deduplicate findings across specialists, keep the highest severity, and convert them into a concise action list.
 6. Return review findings only. Do not implement fixes unless the user separately asks for a follow-up implementation pass.
+
+## Coordinator Output Rule
+
+Do not compress away specialist provenance. The final review must preserve, for every finding:
+
+- Specialist skill name
+- Exact heuristic, review-focus item, or reference heuristic used
+- Skill file path and line reference when available
+- Subagent severity
+- Concrete code or documentation evidence
+- Smallest practical fix
+
+When deduplicating, merge duplicate findings only if they share the same affected behavior. Preserve all contributing specialist heuristics under the merged finding.
+
+Do not summarize findings into generic P2/P3 bullets unless heuristic provenance remains attached to each finding.
 
 ## Specialist Subagent Prompts
 
 Use these prompts when spawning the specialist subagents:
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the architecture-quality skill to review this diff for abstraction boundaries, interface shape, dependency direction, control-flow locality, batching opportunities, and locality of behavior. Confirm that you used architecture-quality. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the architecture-quality skill to review this diff for abstraction boundaries, interface shape, dependency direction, control-flow locality, batching opportunities, and locality of behavior. Confirm that you used architecture-quality. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the errors-observability skill to review this diff for error classification, retry behavior, fallback semantics, structured logging, tracing, and debuggability. Confirm that you used errors-observability. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the errors-observability skill to review this diff for error classification, retry behavior, fallback semantics, structured logging, tracing, and debuggability. Confirm that you used errors-observability. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the correctness-design skill to review this diff for boundary parsing, invalid states, semantic naming, validation placement, preconditions, invariants, assertions, and state transitions. Confirm that you used correctness-design. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the correctness-design skill to review this diff for boundary parsing, invalid states, semantic naming, validation placement, preconditions, invariants, assertions, and state transitions. Confirm that you used correctness-design. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the testing-discipline skill to review this diff for missing regression coverage, unit/integration balance, end-to-end scope, and inappropriate mocks. Confirm that you used testing-discipline. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the testing-discipline skill to review this diff for missing regression coverage, unit/integration balance, end-to-end scope, and inappropriate mocks. Confirm that you used testing-discipline. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the implementation-comments skill to review this diff for redundant, stale, missing, or misleading implementation comments; deferred-work notes that should be tracked outside source; commented-out code; and places where clearer code should replace comments. Confirm that you used implementation-comments. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the implementation-comments skill to review this diff for redundant, stale, missing, or misleading implementation comments; deferred-work notes that should be tracked outside source; commented-out code; and places where clearer code should replace comments. Confirm that you used implementation-comments. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the feature-contract-docs skill to review this diff for missing or stale feature-level documentation: purpose, scope, behavior contract, invariants, interfaces, implementation model, tradeoffs, and verification. Confirm that you used feature-contract-docs. Return only actionable findings with file/line references and severity.
+You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the feature-contract-docs skill to review this diff for missing or stale feature-level documentation: purpose, scope, behavior contract, invariants, interfaces, implementation model, tradeoffs, and verification. Confirm that you used feature-contract-docs. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
 ```
 
 ## Output Shape
 
-Lead with findings. For each finding, include the affected file and line, severity, why it matters, and the smallest practical fix. If there are no findings, state that clearly and call out residual risk or test gaps.
+Lead with findings. For each finding, include the affected file and line, severity, specialist skill name, exact heuristic provenance, evidence, why it matters, and the smallest practical fix. If there are no findings, state that clearly and call out residual risk or test gaps.
