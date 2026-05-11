@@ -1,11 +1,15 @@
 ---
 name: architecture-quality
-description: Review and improve software architecture with emphasis on narrow interfaces, avoiding premature abstraction, preserving locality of behavior, reducing indirection, and using dependency inversion. Use when Codex is designing or reviewing abstractions, module boundaries, dependency injection, service interfaces, or refactors.
+description: Review and improve software architecture with emphasis on narrow interfaces, avoiding premature abstraction, preserving locality of behavior, reducing indirection, and using dependency inversion. Use when an AI assistant is designing or reviewing abstractions, module boundaries, dependency injection, service interfaces, or refactors.
 ---
 
 # Architecture Quality
 
 Use this skill to keep code understandable, loosely coupled, and locally reasoned about. Prefer existing codebase patterns unless they directly conflict with the quality goal.
+
+## Quick Start
+
+Review new abstractions by asking whether they reduce real complexity at the call site. Example: a new `UserServiceManager` with one implementation and broad methods should be challenged unless it hides volatile behavior or matches an established local pattern.
 
 ## Review Focus
 

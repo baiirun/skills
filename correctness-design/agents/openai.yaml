@@ -1,4 +1,0 @@
-interface:
-  display_name: "Correctness Design"
-  short_description: "Review invariants and invalid states"
-  default_prompt: "Use $correctness-design to review this diff for boundary parsing, invariant, and invalid-state issues."

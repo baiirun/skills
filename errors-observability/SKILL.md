@@ -1,11 +1,15 @@
 ---
 name: errors-observability
-description: Review and improve error handling, retries, fallbacks, logging, and tracing. Use when Codex works on code that handles failures, external services, jobs, requests, production operations, background tasks, or any behavior where debuggability and operational safety matter.
+description: Review and improve error handling, retries, fallbacks, logging, and tracing. Use when an AI assistant works on code that handles failures, external services, jobs, requests, production operations, background tasks, or any behavior where debuggability and operational safety matter.
 ---
 
 # Errors Observability
 
 Use this skill to make failure behavior explicit and diagnosable. Treat errors as part of the interface, not incidental control flow.
+
+## Quick Start
+
+Review failure paths by classifying each expected error and checking the emitted context. Example: a hydration step that can fail from invalid persisted state, a stale version, or a dependency timeout should expose distinct error tags and log one structured outcome at the boundary.
 
 ## Review Focus
 

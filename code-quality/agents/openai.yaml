@@ -1,4 +1,0 @@
-interface:
-  display_name: "Code Quality"
-  short_description: "Coordinate specialist quality reviews"
-  default_prompt: "Use $code-quality to review this change across architecture, errors, correctness, and testing."

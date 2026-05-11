@@ -1,11 +1,15 @@
 ---
 name: code-quality
-description: Coordinate code quality review and implementation guidance across architecture, errors and observability, correctness, and testing. Use when Codex needs to evaluate or improve code design quality, run a broad code-quality pass, or orchestrate specialist review agents with $architecture-quality, $errors-observability, $correctness-design, and $testing-discipline.
+description: Coordinate code quality review and implementation guidance across architecture, errors and observability, correctness, and testing. Use when an AI assistant needs to evaluate or improve code design quality, run a broad code-quality pass, or orchestrate specialist reviewers with $architecture-quality, $errors-observability, $correctness-design, and $testing-discipline.
 ---
 
 # Code Quality
 
 Use this skill as the coordinator for code-quality work. Keep this skill lightweight: route to the specialist skills instead of duplicating their guidance.
+
+## Quick Start
+
+For a broad review, inspect the changed code and route findings through the relevant specialist dimensions. Example: "Review this diff for code quality" should check whether architecture, errors and observability, correctness, or testing concerns apply, then return a deduplicated findings list.
 
 ## Specialist Skills
 
@@ -18,12 +22,12 @@ Use this skill as the coordinator for code-quality work. Keep this skill lightwe
 
 1. Determine which quality dimensions apply to the task or diff.
 2. Load only the specialist skill bodies needed for those dimensions.
-3. If the user explicitly asks for specialized or parallel agents, spawn one focused agent per relevant dimension.
+3. If delegation is available and the user asks for specialized or parallel review, run one focused reviewer per relevant dimension.
 4. Ask each specialist to return prioritized findings with concrete file and line references when reviewing code.
 5. Deduplicate findings across specialists, keep the highest severity, and convert them into a concise action list.
 6. When implementing fixes, keep edits scoped to the quality issue and preserve existing codebase patterns.
 
-## Specialist Agent Prompts
+## Specialist Reviewer Prompts
 
 Use these prompts when delegation is allowed and useful:
 

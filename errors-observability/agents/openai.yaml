@@ -1,4 +1,0 @@
-interface:
-  display_name: "Errors Observability"
-  short_description: "Review failures, logs, and traces"
-  default_prompt: "Use $errors-observability to review this diff for error handling, retry, logging, and tracing issues."

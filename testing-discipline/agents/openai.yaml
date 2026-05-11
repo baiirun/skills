@@ -1,4 +1,0 @@
-interface:
-  display_name: "Testing Discipline"
-  short_description: "Review test strategy and coverage"
-  default_prompt: "Use $testing-discipline to review this diff for missing coverage, brittle tests, and mocking issues."

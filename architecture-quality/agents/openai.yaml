@@ -1,4 +1,0 @@
-interface:
-  display_name: "Architecture Quality"
-  short_description: "Review interfaces and module boundaries"
-  default_prompt: "Use $architecture-quality to review this diff for abstraction, interface, and dependency boundary issues."

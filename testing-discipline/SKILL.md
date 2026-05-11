@@ -1,11 +1,15 @@
 ---
 name: testing-discipline
-description: Review and improve test strategy with focused unit tests, integration coverage, small high-value end-to-end suites, coarse I/O mocks, and regression-first bug fixes. Use when Codex adds or reviews tests, fixes bugs, changes behavior, or evaluates whether implementation risk is covered.
+description: Review and improve test strategy with focused unit tests, integration coverage, small high-value end-to-end suites, coarse I/O mocks, and regression-first bug fixes. Use when an AI assistant adds or reviews tests, fixes bugs, changes behavior, or evaluates whether implementation risk is covered.
 ---
 
 # Testing Discipline
 
 Use this skill to match test coverage to implementation risk. Tests should protect behavior and invariants without making refactors brittle.
+
+## Quick Start
+
+Review behavior changes by identifying the smallest test that would fail if the behavior regressed. Example: a bug fix for malformed imported data should first add a regression test with the malformed input and expected safe failure.
 
 ## Review Focus
 
