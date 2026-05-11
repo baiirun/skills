@@ -1,6 +1,6 @@
 ---
 name: architecture-quality
-description: Review and improve software architecture with emphasis on narrow interfaces, avoiding premature abstraction, preserving locality of behavior, reducing indirection, and using dependency inversion. Use when an AI assistant is designing or reviewing abstractions, module boundaries, dependency injection, service interfaces, or refactors.
+description: Review and improve software architecture with emphasis on narrow interfaces, avoiding premature abstraction, preserving locality of behavior, centralizing control flow, reducing indirection, batch-oriented hot paths, and using dependency inversion. Use when an AI assistant is designing or reviewing abstractions, module boundaries, dependency injection, service interfaces, helper extraction, batching, or refactors.
 ---
 
 # Architecture Quality
@@ -17,8 +17,10 @@ Review new abstractions by asking whether they reduce real complexity at the cal
 2. Keep interfaces narrow. Expose only the behavior the consumer needs.
 3. Reduce indirection. Flatten designs that require unnecessary jumps to understand behavior.
 4. Preserve locality of behavior. Keep behavior close to the unit where a maintainer looks for it.
-5. Apply dependency inversion from the consumer's needs. Pass dependencies in and depend on small interfaces.
-6. Separate data from behavior when it makes composition clearer without scattering invariants.
+5. Centralize branching and precondition checks where they make control flow easier to verify.
+6. Prefer batch-oriented interfaces when callers repeatedly apply the same operation over many items or a hot path.
+7. Apply dependency inversion from the consumer's needs. Pass dependencies in and depend on small interfaces.
+8. Separate data from behavior when it makes composition clearer without scattering invariants.
 
 ## Heuristics
 
