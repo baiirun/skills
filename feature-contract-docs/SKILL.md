@@ -37,4 +37,4 @@ Read `references/review-heuristics.md` when writing or reviewing a feature contr
 
 ## Output Shape
 
-When writing docs, produce the required shape using concise sections. When reviewing docs, return findings ordered by severity; for each finding, identify the missing or stale contract knowledge, explain the risk for future implementation work, and propose the smallest documentation or code-linking fix.
+When writing docs, produce the required shape using concise sections. When reviewing docs, return findings ordered by severity; for each finding, name the specific heuristic that produced the finding, identify the missing or stale contract knowledge, cite the concrete evidence, explain the risk for future implementation work, and propose the smallest documentation or code-linking fix.

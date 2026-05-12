@@ -15,7 +15,7 @@ Review new abstractions by asking whether they reduce real complexity at the cal
 
 1. Avoid premature abstraction. Let repeated usage and real variation justify new abstractions.
 2. Keep interfaces narrow. Expose only the behavior the consumer needs.
-3. Reduce indirection. Flatten designs that require unnecessary jumps to understand behavior.
+3. Reduce indirection. Flatten designs that require unnecessary jumps to understand behavior, including pass-through wrappers that add no policy, type narrowing, lifecycle ownership, or meaningful context.
 4. Preserve locality of behavior. Keep behavior close to the unit where a maintainer looks for it.
 5. Centralize branching and precondition checks where they make control flow easier to verify.
 6. Prefer batch-oriented interfaces when callers repeatedly apply the same operation over many items or a hot path.
@@ -28,4 +28,4 @@ Read `references/review-heuristics.md` when performing a detailed review, design
 
 ## Output Shape
 
-Return findings ordered by severity. For each finding, identify the coupling or locality issue, explain the maintenance risk, and propose the smallest design change that restores clarity.
+Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the coupling or locality issue, cite the concrete evidence, explain the maintenance risk, and propose the smallest design change that restores clarity.

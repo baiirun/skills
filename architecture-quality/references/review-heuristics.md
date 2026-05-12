@@ -3,6 +3,7 @@
 ## Abstractions
 
 - Flag abstractions with one implementation unless they hide real complexity, isolate volatile behavior, or match a clear existing pattern.
+- Flag exported functions that only forward arguments to another function when they do not narrow the interface, enforce a precondition, choose policy, adapt a boundary, or provide a durable public contract. A renamed alias alone is not enough.
 - Flag boolean flags that make one interface perform multiple unrelated behaviors.
 - Prefer call-site clarity over theoretical reuse. If a helper hides the important decision, keep the decision local.
 - Do not apply DRY when the duplication is cheaper than the coupling created by the shared abstraction.
@@ -18,6 +19,7 @@
 
 - Prefer behavior in the same function, then same file, then nearby module. The farther away behavior moves, the stronger the justification should be.
 - Flag designs where understanding one user action requires following multiple registration layers, callbacks, or side-effectful imports.
+- Flag wrapper functions whose body is only `return callee(...)`, `return await callee(...)`, or the same call wrapped in generic error decoration; keep the call direct unless the wrapper owns behavior a reader would otherwise miss.
 - Keep invariants close to the data or state they protect.
 - Keep complex branching in the parent operation when that lets a reviewer see all cases on one screen and spot redundant, impossible, or dead branches.
 - Prefer leaf helpers that do straight-line work under already-established preconditions instead of helpers that silently check a precondition and return without doing anything.

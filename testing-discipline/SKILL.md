@@ -26,4 +26,4 @@ Read `references/review-heuristics.md` when choosing test level, reviewing mocks
 
 ## Output Shape
 
-Return findings ordered by severity. For each finding, identify the untested behavior or brittle test design, explain the risk, and propose the smallest useful test or test refactor.
+Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the untested behavior or brittle test design, cite the concrete evidence, explain the risk, and propose the smallest useful test or test refactor.

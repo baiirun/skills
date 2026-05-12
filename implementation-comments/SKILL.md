@@ -27,4 +27,4 @@ Read `references/review-heuristics.md` when performing a detailed comment review
 
 ## Output Shape
 
-Return findings ordered by severity. For each finding, identify the confusing or misleading source comment behavior, explain the maintenance risk, and propose the smallest change: remove, rewrite, relocate, link to the relevant feature contract, or replace the comment with clearer code.
+Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the confusing or misleading source comment behavior, cite the concrete evidence, explain the maintenance risk, and propose the smallest change: remove, rewrite, relocate, link to the relevant feature contract, or replace the comment with clearer code.

@@ -17,7 +17,7 @@ Review failure paths by classifying each expected error and checking the emitted
 2. Retry only when the operation is safe, bounded, idempotent, and uses backoff with jitter.
 3. Fail fast for non-retryable errors with structured context.
 4. Use fallbacks only for recoverable degradation, and log the degradation.
-5. Preserve context when wrapping or surfacing errors.
+5. Preserve context when wrapping or surfacing errors, and challenge catch blocks that only restate the operation while losing the original error type, stack, cause, or structured metadata.
 6. Emit structured start and end logs for request and job boundaries.
 7. Log decisions, fallbacks, and unexpected states, not only thrown errors.
 8. Propagate trace or request IDs across boundaries and correlate logs with traces.
@@ -28,4 +28,4 @@ Read `references/review-heuristics.md` when reviewing production paths, asynchro
 
 ## Output Shape
 
-Return findings ordered by severity. For each finding, identify the failure mode, whether it is retryable or recoverable, the missing operational context, and the smallest safe fix.
+Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the failure mode, cite the concrete evidence, state whether it is retryable or recoverable, describe the missing operational context, and propose the smallest safe fix.

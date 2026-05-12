@@ -27,4 +27,4 @@ Read `references/review-heuristics.md` when reviewing input handling, data model
 
 ## Output Shape
 
-Return findings ordered by severity. For each finding, identify the invalid state, semantic naming, or invariant risk, show how it can occur, and propose the smallest change that makes the invariant local and enforceable.
+Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the invalid state, semantic naming, or invariant risk, cite the concrete evidence, show how it can occur, and propose the smallest change that makes the invariant local and enforceable.

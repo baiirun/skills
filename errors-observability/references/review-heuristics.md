@@ -3,6 +3,7 @@
 ## Error Classification
 
 - Flag generic catch blocks that cannot distinguish retryable, recoverable, user-caused, and programmer errors.
+- Flag catch blocks that only convert an error into `new Error("<operation> failed: " + message)` without adding structured metadata, preserving `cause`, or enabling different handling by callers.
 - Flag swallowed errors unless the code retries safely, falls back intentionally, or surfaces a structured failure.
 - Preserve operation names and key identifiers such as request ID, entity ID, user ID, job ID, provider, and attempt number.
 - Prefer typed errors, tagged results, or structured error metadata when downstream handling depends on classification.
