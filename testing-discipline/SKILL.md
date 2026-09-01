@@ -1,29 +1,30 @@
 ---
 name: testing-discipline
-description: Review and improve test strategy with focused unit tests, integration coverage, small high-value end-to-end suites, coarse I/O mocks, and regression-first bug fixes. Use when an AI assistant adds or reviews tests, fixes bugs, changes behavior, or evaluates whether implementation risk is covered.
+description: Review and improve test strategy across focused unit tests, integration coverage, high-value end-to-end flows, coarse I/O mocks, and regression-first bug fixes. Use when adding or reviewing tests, fixing bugs, or judging whether a behavior change is covered.
 ---
 
 # Testing Discipline
 
-Use this skill to match test coverage to implementation risk. Tests should protect behavior and invariants without making refactors brittle.
+Choose the smallest test level that proves the behavior through the boundary most likely to fail.
 
-## Quick Start
+## Principles to load
 
-Review behavior changes by identifying the smallest test that would fail if the behavior regressed. Example: a bug fix for malformed imported data should first add a regression test with the malformed input and expected safe failure.
+- `principle-prove-it-works` for evidence that the requested behavior holds.
+- `principle-sequence-verifiable-units` when implementation order or intermediate verification affects the test plan.
 
-## Review Focus
+The principles define the need for proof. This skill owns test placement: deciding between unit, integration, and end-to-end coverage; choosing useful fakes or mocks; and keeping assertions stable across refactors.
 
-1. Write focused unit tests for important logic and invariants.
-2. Prefer integration tests as the default safety net for behavior across real boundaries.
-3. Keep end-to-end coverage small, curated, and reserved for critical paths and high-value edge cases.
-4. Avoid mocks unless necessary; when needed, mock only coarse I/O boundaries.
-5. Reproduce bugs with regression tests before fixing them.
-6. Verify test names and assertions describe stable behavior rather than implementation details.
+## Review focus
 
-## Heuristics
+1. Use focused unit tests for pure logic, parsing, validation, invariants, and edge-heavy transformations.
+2. Prefer integration tests for behavior that crosses real module, persistence, routing, serialization, or permission boundaries.
+3. Reserve end-to-end tests for critical flows and a small set of valuable edge cases.
+4. Mock only coarse, slow, nondeterministic I/O boundaries. Avoid tests coupled to internal call order.
+5. Reproduce a bug with a regression test before changing the behavior when practical.
+6. Name and assert observable behavior rather than private implementation choreography.
 
-Read `references/review-heuristics.md` when choosing test level, reviewing mocks, fixing bugs, or deciding whether coverage is sufficient for a behavior change.
+Read `references/review-heuristics.md` when choosing test level or reviewing mocks and regression coverage.
 
-## Output Shape
+## Output
 
-Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the untested behavior or brittle test design, cite the concrete evidence, explain the risk, and propose the smallest useful test or test refactor.
+Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, explain the uncovered behavior or brittleness, and propose the smallest useful test or test refactor.

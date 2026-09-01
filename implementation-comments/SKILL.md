@@ -1,30 +1,31 @@
 ---
 name: implementation-comments
-description: Add and review local source-code comments that explain why nearby implementation code exists or is written a certain way, especially non-obvious invariants, spec requirements, tradeoffs, failure semantics, and constraints. Use when an AI assistant writes, edits, or reviews inline comments, block comments, workaround notes, deferred-work comments, or commented-out code inside source files.
+description: Write and review source comments that explain non-obvious local intent, invariants, requirements, tradeoffs, failure semantics, or external constraints. Use when adding or reviewing inline comments, block comments, workaround notes, deferred-work comments, or commented-out code.
 ---
 
 # Implementation Comments
 
-Use this skill to make source comments earn their place. Comments should explain why nearby code is shaped a certain way, which invariant or spec requirement it protects, or what external constraint is not obvious from the implementation.
+This skill owns the repository's general policy for source comments. A comment should preserve a local reason the code cannot express clearly by itself.
 
-## Quick Start
+Use `no-comments` only when the user explicitly asks for an aggressive cleanup pass that removes comments and suppressions and implements small root-cause fixes. That workflow loads this skill for policy.
 
-Add a comment only where the reader would otherwise miss the local why. Example: a retry loop that deliberately skips a specific provider error should say why the feature contract treats that error as terminal, not describe that the loop iterates attempts.
+## Principles to load
 
-## Review Focus
+- `principle-minimize-reader-load` for narration, duplication, and comments that increase reading cost.
+- `principle-encode-lessons-in-structure` when a type, assertion, test, name, or lint rule can enforce the lesson.
 
-1. Explain local intent, constraints, invariants, spec requirements, tradeoffs, and surprising behavior.
-2. Avoid comments that merely translate nearby code into prose.
-3. Keep comments close to the behavior or invariant they explain.
-4. Replace stale, vague, or misleading comments instead of adding more commentary.
-5. Prefer clearer code over explanatory comments when a small rename or extraction removes the confusion.
-6. Remove deferred-work comments; create tracked work instead of leaving reminders in source.
-7. Delete commented-out code unless it documents an intentional disabled path with a clear reason.
+## Review focus
 
-## Heuristics
+1. Keep comments that explain local intent, an invariant, a requirement, a tradeoff, surprising failure behavior, or an external constraint.
+2. Remove comments that translate nearby syntax into prose.
+3. Keep the explanation beside the behavior it governs and narrow its scope.
+4. Rewrite or remove stale, vague, and misleading comments.
+5. Prefer a small code clarification when it can express the same fact without commentary.
+6. Move deferred work to the project's tracking system.
+7. Delete commented-out code unless it represents an intentionally disabled path with a current reason and removal condition.
 
-Read `references/review-heuristics.md` when performing a detailed comment review, adding comments to complex implementation code, or deciding whether code should be clarified instead of commented.
+Read `references/review-heuristics.md` for detailed authoring and review guidance.
 
-## Output Shape
+## Output
 
-Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the confusing or misleading source comment behavior, cite the concrete evidence, explain the maintenance risk, and propose the smallest change: remove, rewrite, relocate, link to the relevant feature contract, or replace the comment with clearer code.
+For authored comments, write only the necessary local explanation. For reviews, order findings by severity and propose the smallest action: keep, remove, rewrite, relocate, link to a durable contract, or encode the rule in code or tests.

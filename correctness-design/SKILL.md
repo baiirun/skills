@@ -1,30 +1,31 @@
 ---
 name: correctness-design
-description: Review and improve correctness by parsing inputs at boundaries, making illegal states unrepresentable, naming domain concepts precisely, placing validation near data, preserving invariants, and using assertions around important state transitions. Use when an AI assistant works on domain models, input parsing, state machines, validation, data transformations, same-typed parameters, unit-sensitive values, or bug-prone logic.
+description: Review and improve domain states, input parsing, semantic naming, validation, invariants, and transformations. Use for domain models, state machines, unit-sensitive values, same-typed parameters, data transformations, or bug-prone logic.
 ---
 
 # Correctness Design
 
-Use this skill to make incorrect states hard to express and easy to detect. Prefer validated structures over repeated defensive checks.
+Review whether the design makes invalid behavior difficult to express and easy to detect.
 
-## Quick Start
+## Principles to load
 
-Review raw inputs at the first boundary they enter. Example: a webhook handler should parse and validate the payload once, then pass a typed event inward instead of passing raw JSON through multiple layers.
+- `principle-model-the-domain` for domain concepts, states, transitions, and terminology.
+- `principle-type-system-discipline` for validated types and illegal-state prevention.
+- `principle-boundary-discipline` for parsing raw input once at the boundary.
 
-## Review Focus
+The principles supply the shared modeling rules. This skill owns the correctness review: tracing invalid states through real flows, checking semantic naming and units, examining transformations, and judging whether positive and negative cases are covered.
 
-1. Parse raw inputs at the boundary once, then pass structured values inward.
-2. Model invalid combinations out of existence with types, constructors, or schemas.
-3. Name domain concepts, units, ownership, lifecycle, and state transitions precisely enough that misuse is visible.
-4. Keep invariants close to the data or state they protect.
-5. Avoid shotgun parsing and repeated validation across call sites.
-6. Use assertions for critical inputs, outputs, invariants, and state transitions.
-7. Cover positive and negative spaces: valid cases, invalid cases, boundaries, and transitions.
+## Review focus
 
-## Heuristics
+1. Find the first trusted boundary for each raw input and verify that parsing and validation happen there.
+2. Trace invalid combinations, ambiguous absence, and partial states through constructors and transitions.
+3. Check that names encode domain role, units, ownership, lifecycle, and source or target when those distinctions affect behavior.
+4. Keep invariant enforcement next to the state it protects.
+5. Check transformations for total handling, preserved identity and context, and safe failure without partial mutation.
+6. Cover valid cases, rejected cases, boundaries, and state transitions.
 
-Read `references/review-heuristics.md` when reviewing input handling, data models, transformations, state machines, unit-sensitive values, same-typed parameters, domain terminology, or code that previously produced correctness bugs.
+Read `references/review-heuristics.md` for detailed naming and transformation checks.
 
-## Output Shape
+## Output
 
-Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the invalid state, semantic naming, or invariant risk, cite the concrete evidence, show how it can occur, and propose the smallest change that makes the invariant local and enforceable.
+Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, show how the invalid state or ambiguity can occur, and propose the smallest change that makes the rule local and enforceable.

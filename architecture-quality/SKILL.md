@@ -1,31 +1,34 @@
 ---
 name: architecture-quality
-description: Review and improve software architecture with emphasis on narrow interfaces, avoiding premature abstraction, preserving locality of behavior, centralizing control flow, reducing indirection, batch-oriented hot paths, and using dependency inversion. Use when an AI assistant is designing or reviewing abstractions, module boundaries, dependency injection, service interfaces, helper extraction, batching, or refactors.
+description: Review and improve module boundaries, interface depth, dependency direction, control-flow locality, batching, and avoidable indirection. Use when designing or reviewing abstractions, service interfaces, dependency injection, helper extraction, batching, or refactors.
 ---
 
 # Architecture Quality
 
-Use this skill to keep code understandable, loosely coupled, and locally reasoned about. Prefer existing codebase patterns unless they directly conflict with the quality goal.
+Review whether the code places responsibility where a maintainer can understand and change it safely.
 
-## Quick Start
+## Principles to load
 
-Review new abstractions by asking whether they reduce real complexity at the call site. Example: a new `UserServiceManager` with one implementation and broad methods should be challenged unless it hides volatile behavior or matches an established local pattern.
+Load these principle skills when they apply:
 
-## Review Focus
+- `principle-laziness-protocol` for speculative abstractions and changes larger than the evidence supports.
+- `principle-minimize-reader-load` for interface depth, pass-through layers, locality, and navigation cost.
+- `principle-foundational-thinking` for data shape, ownership, and module structure.
+- `principle-boundary-discipline` for framework, transport, persistence, or vendor details crossing the wrong seam.
 
-1. Avoid premature abstraction. Let repeated usage and real variation justify new abstractions.
-2. Keep interfaces narrow. Expose only the behavior the consumer needs.
-3. Reduce indirection. Flatten designs that require unnecessary jumps to understand behavior, including pass-through wrappers that add no policy, type narrowing, lifecycle ownership, or meaningful context.
-4. Preserve locality of behavior. Keep behavior close to the unit where a maintainer looks for it.
-5. Centralize branching and precondition checks where they make control flow easier to verify.
-6. Prefer batch-oriented interfaces when callers repeatedly apply the same operation over many items or a hot path.
-7. Apply dependency inversion from the consumer's needs. Pass dependencies in and depend on small interfaces.
-8. Separate data from behavior when it makes composition clearer without scattering invariants.
+The principles supply shared rules. This skill owns the architecture review: applying those rules across modules, assessing dependency direction, deciding whether control flow is centralized enough to verify, and identifying useful batch interfaces.
 
-## Heuristics
+## Review focus
 
-Read `references/review-heuristics.md` when performing a detailed review, designing a new abstraction, or deciding whether to split or merge modules.
+1. Judge abstractions by the complexity they hide at their call sites and the real variation they contain.
+2. Define interfaces from consumer needs and keep infrastructure details behind their owning boundary.
+3. Keep policy and branching visible in one place when scattering them would make behavior harder to verify.
+4. Preserve locality. A helper or layer should own policy, validation, lifecycle, adaptation, or another meaningful responsibility.
+5. Prefer batch operations when they remove repeated setup or decisions from a common or hot loop without obscuring per-item failures or ordering.
+6. Point dependencies from high-level policy toward narrow ports rather than concrete infrastructure.
 
-## Output Shape
+Read `references/review-heuristics.md` for a detailed architecture review.
 
-Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the coupling or locality issue, cite the concrete evidence, explain the maintenance risk, and propose the smallest design change that restores clarity.
+## Output
+
+Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, explain the coupling or maintenance cost, and propose the smallest design change that restores clarity.

@@ -1,86 +1,44 @@
 ---
 name: code-quality
-description: Coordinate read-only code-quality reviews across architecture, errors and observability, correctness, testing, implementation comments, and feature contract docs. Use when an AI assistant needs to review code quality, run a broad code-quality pass, or orchestrate specialist subagent reviewers with architecture-quality, errors-observability, correctness-design, testing-discipline, implementation-comments, and feature-contract-docs. This skill must not edit files or implement fixes.
+description: Coordinate a read-only review across architecture, correctness, errors and observability, testing, implementation comments, and feature contract documentation. Use for broad code-quality reviews. This skill reports findings and does not edit code.
 ---
 
 # Code Quality
 
-Use this skill as the coordinator for read-only code-quality review work. Keep this skill lightweight: route to the specialist skills in dedicated subagents instead of duplicating their guidance.
+Coordinate the specialist review skills. Do not duplicate their policy here.
 
-## Review Contract
+## Contract
 
-- This is a code review skill, not an implementation or fix skill.
-- Do not edit files, run formatters that write files, stage changes, commit, or implement fixes.
-- Treat invocation of `code-quality` as an explicit request to run specialist review subagents.
-- A `code-quality` review is not complete unless each selected specialist subagent confirms it loaded and applied its assigned specialist skill.
-- Do not substitute a generic code review for the specialist heuristics. Findings must come from the relevant specialist dimensions below.
-- If specialist subagents cannot be spawned or a specialist skill cannot be loaded, stop and report that `code-quality` could not be completed instead of silently continuing as a normal code review.
+- Review only. Do not edit files, format code, stage changes, commit, or implement fixes.
+- Select only the specialists relevant to the changed behavior.
+- Use independent reviewers concurrently when the harness supports them. Otherwise run the same specialist passes sequentially.
+- If a relevant specialist cannot be loaded, name the missing coverage instead of silently replacing it with a generic review.
 
-## Quick Start
+## Specialists
 
-For a broad review, inspect the changed code, choose the relevant specialist dimensions, and run each selected specialist skill as a focused read-only subagent. Example: "Review this diff for code quality" should check whether architecture, errors and observability, correctness, testing, implementation comment, or feature contract documentation concerns apply, run the relevant specialist subagents, then return a deduplicated findings list. Do not make code changes.
-
-## Specialist Skills
-
-- Use `architecture-quality` for abstractions, interfaces, dependency direction, indirection, control-flow locality, batching, and locality of behavior.
-- Use `errors-observability` for error classification, retries, fallbacks, logging, tracing, and operational debuggability.
-- Use `correctness-design` for boundary parsing, invariants, illegal states, semantic naming, validation placement, preconditions, and assertions.
-- Use `testing-discipline` for test strategy, regression tests, integration coverage, end-to-end boundaries, and mocking discipline.
-- Use `implementation-comments` for local source comments that explain non-obvious why, invariants, spec requirements, tradeoffs, failure semantics, constraints, deferred-work notes, and commented-out code.
-- Use `feature-contract-docs` for durable feature documentation that models purpose, scope, behavior contracts, invariants, interfaces, implementation model, tradeoffs, and verification.
+- `architecture-quality`: interfaces, dependency direction, indirection, locality, control flow, and batching.
+- `correctness-design`: domain states, parsing, validation, invariants, naming, and transformations.
+- `errors-observability`: error classification, retries, fallbacks, logs, traces, and operational diagnosis.
+- `testing-discipline`: test level, regression coverage, mocks, and behavior-focused assertions.
+- `implementation-comments`: missing, stale, redundant, or misleading source comments.
+- `feature-contract-docs`: missing or stale durable feature contracts. Select this only when the change introduces or alters a feature-level contract that future maintainers need.
 
 ## Workflow
 
-1. Determine which quality dimensions apply to the task or diff.
-2. Run one focused read-only subagent per relevant specialist skill. Subagents must load and apply their assigned specialist skill themselves.
-3. Ask each specialist subagent to confirm the specialist skill it used, then return prioritized findings with concrete file and line references, evidence, and the specific heuristic used for each finding.
-4. If subagents are unavailable, stop and report that `code-quality` could not be completed.
-5. Deduplicate findings across specialists, keep the highest severity, and convert them into a concise action list.
-6. Return review findings only. Do not implement fixes unless the user separately asks for a follow-up implementation pass.
+1. Inspect the requested scope and identify the changed behaviors and boundaries.
+2. Select the relevant specialist skills. Load and apply each selected skill in full.
+3. Ask each specialist for actionable findings with file and line evidence, severity, the rule that was violated, and the smallest practical fix.
+4. Merge findings only when they describe the same affected behavior. Preserve every contributing specialist and rule.
+5. Return findings only. A later implementation request may apply the fixes.
 
-## Coordinator Output Rule
+## Output
 
-Do not compress away specialist provenance. The final review must preserve, for every finding:
+Lead with findings ordered by severity. Each finding must include:
 
-- Specialist skill name
-- Exact heuristic, review-focus item, or reference heuristic used
-- Skill file path and line reference when available
-- Subagent severity
-- Concrete code or documentation evidence
-- Smallest practical fix
+- affected file and line;
+- severity;
+- contributing specialist and rule;
+- concrete evidence and consequence;
+- smallest practical fix.
 
-When deduplicating, merge duplicate findings only if they share the same affected behavior. Preserve all contributing specialist heuristics under the merged finding.
-
-Do not summarize findings into generic P2/P3 bullets unless heuristic provenance remains attached to each finding.
-
-## Specialist Subagent Prompts
-
-Use these prompts when spawning the specialist subagents:
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the architecture-quality skill to review this diff for abstraction boundaries, interface shape, dependency direction, control-flow locality, batching opportunities, and locality of behavior. Confirm that you used architecture-quality. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the errors-observability skill to review this diff for error classification, retry behavior, fallback semantics, structured logging, tracing, and debuggability. Confirm that you used errors-observability. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the correctness-design skill to review this diff for boundary parsing, invalid states, semantic naming, validation placement, preconditions, invariants, assertions, and state transitions. Confirm that you used correctness-design. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the testing-discipline skill to review this diff for missing regression coverage, unit/integration balance, end-to-end scope, and inappropriate mocks. Confirm that you used testing-discipline. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the implementation-comments skill to review this diff for redundant, stale, missing, or misleading implementation comments; deferred-work notes that should be tracked outside source; commented-out code; and places where clearer code should replace comments. Confirm that you used implementation-comments. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-```text
-You are a read-only specialist code reviewer. Do not edit files, run write commands, stage changes, commit, or implement fixes. Load and use the feature-contract-docs skill to review this diff for missing or stale feature-level documentation: purpose, scope, behavior contract, invariants, interfaces, implementation model, tradeoffs, and verification. Confirm that you used feature-contract-docs. Return only actionable findings with file/line references, severity, evidence, and the specific heuristic used for each finding. Quote or paraphrase the exact heuristic, review-focus item, or reference heuristic from the skill, and include the skill file path plus line reference when available.
-```
-
-## Output Shape
-
-Lead with findings. For each finding, include the affected file and line, severity, specialist skill name, exact heuristic provenance, evidence, why it matters, and the smallest practical fix. If there are no findings, state that clearly and call out residual risk or test gaps.
+If there are no findings, say so and name any review coverage or verification gaps.

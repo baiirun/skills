@@ -1,31 +1,32 @@
 ---
 name: errors-observability
-description: Review and improve error handling, retries, fallbacks, logging, and tracing. Use when an AI assistant works on code that handles failures, external services, jobs, requests, production operations, background tasks, or any behavior where debuggability and operational safety matter.
+description: Review and improve error classification, retries, fallbacks, logging, tracing, and operational diagnosis. Use for external services, jobs, requests, background work, and other failure-sensitive production paths.
 ---
 
-# Errors Observability
+# Errors and Observability
 
-Use this skill to make failure behavior explicit and diagnosable. Treat errors as part of the interface, not incidental control flow.
+Review whether failures are safe to handle and possible to diagnose from production evidence.
 
-## Quick Start
+## Principles to load
 
-Review failure paths by classifying each expected error and checking the emitted context. Example: a hydration step that can fail from invalid persisted state, a stale version, or a dependency timeout should expose distinct error tags and log one structured outcome at the boundary.
+- `principle-fix-root-causes` for symptom guards and error handling that hides the underlying defect.
+- `principle-make-operations-idempotent` for retries and repeated delivery.
+- `principle-boundary-discipline` for preserving error meaning across process and service boundaries.
+- `principle-prove-it-works` for failure-path verification and operational evidence.
 
-## Review Focus
+The principles supply shared rules. This skill owns failure classification, retry and fallback policy, structured event design, trace propagation, and the practical question of whether an operator can diagnose the outcome.
 
-1. Classify errors by retryable vs non-retryable and recoverable vs non-recoverable.
-2. Retry only when the operation is safe, bounded, idempotent, and uses backoff with jitter.
-3. Fail fast for non-retryable errors with structured context.
-4. Use fallbacks only for recoverable degradation, and log the degradation.
-5. Preserve context when wrapping or surfacing errors, and challenge catch blocks that only restate the operation while losing the original error type, stack, cause, or structured metadata.
-6. Emit structured start and end logs for request and job boundaries.
-7. Log decisions, fallbacks, and unexpected states, not only thrown errors.
-8. Propagate trace or request IDs across boundaries and correlate logs with traces.
+## Review focus
 
-## Heuristics
+1. Classify expected failures by retryability, recoverability, and responsibility.
+2. Retry only safe, bounded operations with backoff, jitter, and a clear terminal outcome.
+3. Use fallbacks only for deliberate recoverable degradation and record when they activate.
+4. Preserve type, cause, stack, identifiers, and structured context when errors cross a boundary.
+5. Emit useful structured outcomes at request and job boundaries, including duration, attempts, and result.
+6. Propagate request or trace identity through queues, services, workers, and external calls.
 
-Read `references/review-heuristics.md` when reviewing production paths, asynchronous jobs, external integrations, retry logic, or logging/tracing changes.
+Read `references/review-heuristics.md` for detailed operational checks.
 
-## Output Shape
+## Output
 
-Return findings ordered by severity. For each finding, name the specific heuristic that produced the finding, identify the failure mode, cite the concrete evidence, state whether it is retryable or recoverable, describe the missing operational context, and propose the smallest safe fix.
+Order findings by severity. For each finding, name the specialist heuristic or loaded principle, identify the failure mode, cite the evidence, state the retry or recovery semantics, describe the missing diagnostic context, and propose the smallest safe fix.
