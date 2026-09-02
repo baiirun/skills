@@ -11,6 +11,8 @@ Encode the real domain in a data structure instead of scattering it across condi
 
 Treat high cyclomatic complexity as a diagnostic, not a score to optimize mechanically. Before rearranging conditionals, look for repeated decisions, equivalent branches, invalid state combinations, or a missing table, state machine, or domain type. The goal is fewer distinct cases, not prettier branching syntax.
 
+Classify every stored value. Keep user or system input that the requirements say must be remembered as authoritative state. Derive values such as status flags, totals, and projections from that state instead of maintaining two writable facts. When a derived value must be stored for performance, identify its source and make it rebuildable.
+
 **Reach for structures like these:**
 
 - A state machine instead of scattered booleans, phases, or lifecycle checks.

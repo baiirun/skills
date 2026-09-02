@@ -15,6 +15,7 @@ Load these principle skills when they apply:
 - `principle-minimize-reader-load` for interface depth, pass-through layers, locality, and navigation cost.
 - `principle-foundational-thinking` for data shape, ownership, and module structure.
 - `principle-boundary-discipline` for framework, transport, persistence, or vendor details crossing the wrong seam.
+- `principle-separate-logic-state-and-effects` when business decisions depend on hidden state, I/O, caching, scheduling, or physical storage choices.
 
 The principles supply shared rules. This skill owns the architecture review: applying those rules across modules, assessing dependency direction, deciding whether control flow is centralized enough to verify, and identifying useful batch interfaces.
 

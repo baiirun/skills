@@ -11,6 +11,7 @@ A useful test fails when promised behavior breaks and survives when the implemen
 
 - Separate decisions from effects when the split clarifies the code. Keep domain logic callable without a database, network, clock, random source, or process-wide state.
 - Pass nondeterministic or external dependencies through a stable boundary. Tests should be able to supply a clock, identifier source, or coarse I/O fake without replacing internal collaborators one by one.
+- Treat hidden mutable state as an implicit test input. A test from one clean starting state proves nothing about another state; remove the hidden state, pass it explicitly, or cover the meaningful transitions.
 - Make results observable through the same contract callers use: return values, persisted state, emitted events, protocol messages, or user-visible output.
 - Do not expose private methods, add production branches, or split cohesive code into mockable fragments solely for tests. Hard-to-test code often reveals hidden dependencies or mixed responsibilities, but more seams are not automatically better.
 

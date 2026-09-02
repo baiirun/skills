@@ -16,6 +16,7 @@ Maintainability is the work a reader must do to understand code. Track two axes:
 - **Make adjacent layers change the abstraction.** A layer that repeats the same methods and arguments adds reader load without compression. Collapse pass-through layers.
 - **Demand interface compression.** A broad interface that hides little complexity makes readers learn both the surface and the implementation. Prefer boundaries that hide meaningful decisions.
 - **Shrink state scope:** prefer pure functions (returns over mutations), locals over fields, fields over module state, and module state over globals. Derive instead of sync.
+- **Reject disguised global state.** A pure function that accepts one giant context or `AppState` still makes every contained value a possible dependency. Pass the smallest explicit inputs that determine the result.
 - **Name the invariant at the boundary,** not in every consumer, so the reader learns it once.
 - Before adding a layer or a piece of state, ask: does this reduce reader load somewhere else by at least as much?
 
