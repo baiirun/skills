@@ -9,6 +9,8 @@ Encode the real domain in a data structure instead of scattering it across condi
 
 **Why:** Scattered booleans, repeated shape assumptions, and branching spread across files are accidental complexity. A structure that matches the domain makes invalid states unrepresentable and deletes branches. Choosing it at write time is cheap; recovering it later reads as a refactor and gets deferred.
 
+Treat high cyclomatic complexity as a diagnostic, not a score to optimize mechanically. Before rearranging conditionals, look for repeated decisions, equivalent branches, invalid state combinations, or a missing table, state machine, or domain type. The goal is fewer distinct cases, not prettier branching syntax.
+
 **Reach for structures like these:**
 
 - A state machine instead of scattered booleans, phases, or lifecycle checks.

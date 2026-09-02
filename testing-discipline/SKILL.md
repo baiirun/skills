@@ -9,6 +9,7 @@ Choose the smallest test level that proves the behavior through the boundary mos
 
 ## Principles to load
 
+- `principle-test-behavior` when designing code for testability or judging whether assertions prove behavior rather than mirror implementation.
 - `principle-prove-it-works` for evidence that the requested behavior holds.
 - `principle-sequence-verifiable-units` when implementation order or intermediate verification affects the test plan.
 
