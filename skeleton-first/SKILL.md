@@ -11,7 +11,9 @@ structure first, as code, and have the user review it.
 
 ## Phase 1: Decide the decomposition (no code yet)
 1. List the domain concepts and the states they can be in. Choose types that rule out
-   illegal states.
+   illegal states, and specify them strictly: the skeleton is where the shape gets
+   pinned down. This overrides the "strengthen only where partiality appears, then
+   stop" guidance in `principles/type-system-discipline.md` for skeleton work.
 2. Choose a representation in which edge cases follow from the structure. Example: if
    arrays are strided views, most slicing rules fall out without special cases.
    Ask: "under this design, how many special cases disappear?"
@@ -22,16 +24,23 @@ structure first, as code, and have the user review it.
 
 ## Phase 2: Write the skeleton as real code
 - Put the stubs in the real source files, in the target language, and make them
-  compile or typecheck. Use the language's "not implemented" form (Rust `todo!()`,
-  TS `throw new Error("unimplemented")`, Python `...`).
+  compile or typecheck. Use the language's never-returning "not implemented" form
+  (Rust `todo!()`, TS `throw new Error("unimplemented")`, Python `...`), never a cast
+  or dummy value such as `{} as Foo` or `null!`.
 - Include: types/structs/enums, module layout, public and internal signatures,
   allowed dependencies between modules.
-- Give each function a contract in its doc comment:
+- When a schema owns a shape (protobuf, OpenAPI, GraphQL, a database migration),
+  derive the skeleton's types from it instead of writing a parallel type by hand.
+- Encode every precondition and invariant in the types first: `NonEmpty<Item>`, not
+  `Requires: items is non-empty`; `TimeRange { start, duration }`, not
+  `Requires: start < end`.
+- Give each function a contract in its doc comment, covering only what the types
+  can't express (side effects, ordering, performance, cross-component properties):
     Requires: what the caller guarantees
     Ensures:  what the function guarantees on return
     Must not: side effects or mutations that are forbidden
-- Write global invariants (properties that span components) once, at module level.
-  Keep them few.
+- Write global invariants (properties that span components and that no type can
+  carry) once, at module level. Keep them few.
 - **Contract budget:** ≤ 5 lines per function. State only decisions you would reject
   an implementation for. Over-detailed contracts lower agent accuracy.
 - No implementation details in contracts unless they are requirements (performance,
@@ -71,6 +80,7 @@ Don't patch around behavior that was never specified.
 ## Checklist for a good skeleton
 - [ ] Compiles/typechecks with stubs
 - [ ] Types make illegal states unrepresentable
+- [ ] No contract line states something a type could carry
 - [ ] Every component can be pinned down by a ≤5-line contract
 - [ ] Correct components imply a correct whole
 - [ ] Intermediate state that matters is visible at an interface
