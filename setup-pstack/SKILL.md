@@ -27,7 +27,6 @@ Do not write configuration until the user chooses project-local or user-level sc
 6. Write YAML in this shape:
 
 ```yaml
-feature: inherit-parent
 refactoring: inherit-parent
 bug-fix: inherit-parent
 perf-issue: inherit-parent
@@ -51,9 +50,6 @@ arena-runners:
 arena-cross-judge-pool:
   - inherit-parent
 swarm-workers: inherit-parent
-architect-runners:
-  - inherit-parent
-  - inherit-parent
 interrogate-reviewers:
   - inherit-parent
   - inherit-parent
