@@ -34,6 +34,10 @@ These skills were ported from [Cursor's pstack collection](https://github.com/cu
 
 `tdd` and `make-bot-ui` are intentionally excluded.
 
+## Refactoring
+
+- [`untangle-codebase`](untangle-codebase/SKILL.md): Runs a whole-codebase refactor in one pass so agents read less per change, break less silently, and debug faster. Invoke explicitly; it does not auto-trigger. Vendored from [caldoai/skills](https://github.com/caldoai/skills/tree/main/skills/untangle-codebase).
+
 ## References
 
 Some skills include deeper guidance under `references/`, executable helpers under `scripts/`, or workflow-specific playbooks. Load only the resources named by the active skill.
