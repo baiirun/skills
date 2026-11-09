@@ -2,7 +2,7 @@
 
 > Apply when deciding which tests a change needs and at which level. Write only tests that go red for a reason you'd reject an implementation over, at the cheapest level that catches the failure.
 
-Every test must be able to go **red** for a reason you'd care about: a broken invariant, a mishandled edge case the design exists for, or a regressed bug. Fewer, sharper tests beat coverage. This principle decides how many tests and at which level; [test-behavior](test-behavior.md) decides what each test asserts.
+Every test must be able to go **red** for a reason you'd care about: a broken invariant, a mishandled edge case the design exists for, or a regressed bug. Fewer, sharper tests beat coverage.
 
 For each behavior change, name the one test that would fail if the behavior broke, and write that.
 

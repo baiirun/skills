@@ -12,8 +12,7 @@ structure first, as code, and have the user review it.
 ## Phase 1: Decide the decomposition (no code yet)
 1. List the domain concepts and the states they can be in. Choose types that rule out
    illegal states, and specify them strictly: the skeleton is where the shape gets
-   pinned down. This overrides the "strengthen only where partiality appears, then
-   stop" guidance in `principles/type-system-discipline.md` for skeleton work.
+   pinned down.
 2. Choose a representation in which edge cases follow from the structure. Example: if
    arrays are strided views, most slicing rules fall out without special cases.
    Ask: "under this design, how many special cases disappear?"

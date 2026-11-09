@@ -5,7 +5,7 @@ description: Perform an explicit, aggressive cleanup of comments and suppression
 
 # No Comments
 
-Use this workflow only when the user explicitly asks for a comment-removal or no-comments pass. It is an editing workflow over existing comments, unlike `principles/comment-the-why.md`, which guides comments while writing code.
+Use this workflow only when the user explicitly asks for a comment-removal or no-comments pass.
 
 ## Policy to load
 
