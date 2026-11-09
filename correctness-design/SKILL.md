@@ -1,31 +1,50 @@
 ---
 name: correctness-design
-description: Review and improve domain states, input parsing, semantic naming, validation, invariants, and transformations. Use for domain models, state machines, unit-sensitive values, same-typed parameters, data transformations, or bug-prone logic.
+description: Parse, don't validate, and make illegal states unrepresentable. Use when designing data types, parsing input at a boundary, naming domain or unit-sensitive values, or writing state machines and transformations.
 ---
 
 # Correctness Design
 
-Review whether the design makes invalid behavior difficult to express and easy to detect.
+Prefer structures that can't hold a bad value over checks that catch one later.
 
-## Principles to load
+## Quick Start
 
-- `principle-model-the-domain` for domain concepts, states, transitions, and terminology.
-- `principle-type-system-discipline` for validated types and illegal-state prevention.
-- `principle-boundary-discipline` for parsing raw input once at the boundary.
+Start from the boundary where data enters and design the type the rest of the code
+will receive. Example: a webhook handler parses and validates the payload once into a
+typed event, and everything inward takes that event, never the raw JSON.
 
-The principles supply the shared modeling rules. This skill owns the correctness review: tracing invalid states through real flows, checking semantic naming and units, examining transformations, and judging whether positive and negative cases are covered.
+## Implementation Focus
 
-## Review focus
+1. **Parse, don't validate.** Turn raw input into a typed value once, at the boundary,
+   and pass that inward. Inner code relies on the type instead of re-checking.
+2. **Make illegal states unrepresentable**: tagged variants, constructors that
+   validate, schemas.
+3. Name domain concepts, units, ownership, lifecycle, and states precisely enough that
+   misuse reads as wrong.
+4. Put each invariant next to the data or state it protects.
+5. Assert critical inputs, outputs, invariants, and state transitions.
+6. Design for the negative space too: invalid input, boundaries, and transitions get a
+   defined outcome.
 
-1. Find the first trusted boundary for each raw input and verify that parsing and validation happen there.
-2. Trace invalid combinations, ambiguous absence, and partial states through constructors and transitions.
-3. Check that names encode domain role, units, ownership, lifecycle, and source or target when those distinctions affect behavior.
-4. Keep invariant enforcement next to the state it protects.
-5. Check transformations for total handling, preserved identity and context, and safe failure without partial mutation.
-6. Cover valid cases, rejected cases, boundaries, and state transitions.
+## Principles
 
-Read `references/review-heuristics.md` for detailed naming and transformation checks.
+- When logic branches on scattered booleans, phases, or repeated shape assumptions,
+  call the Skill tool with `principle-model-the-domain`.
+- When designing types or signatures in a statically typed language, call the Skill
+  tool with `principle-type-system-discipline`.
+- When deciding where validation and error handling go, call the Skill tool with
+  `principle-boundary-discipline`.
+- When deciding where branching and precondition checks live, call the Skill tool with
+  `architecture-quality`.
 
-## Output
+## Heuristics
 
-Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, show how the invalid state or ambiguity can occur, and propose the smallest change that makes the rule local and enforceable.
+Read `references/implementation-heuristics.md` when designing input handling, data
+models, transformations, or state machines, when naming unit-sensitive or same-typed
+values, or when working in code that has produced correctness bugs before.
+
+## Before You Finish
+
+- Raw strings, maps, and nullable fields stop at the boundary where their shape is known.
+- Mutually exclusive states are one tagged value, not a combination of optionals or booleans.
+- Every transformation has a defined output or structured error for every input.

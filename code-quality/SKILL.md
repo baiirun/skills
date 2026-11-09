@@ -1,44 +1,55 @@
 ---
 name: code-quality
-description: Coordinate a read-only review across architecture, correctness, errors and observability, testing, implementation comments, and feature contract documentation. Use for broad code-quality reviews. This skill reports findings and does not edit code.
+description: Walk a feature build through data model, structure, failures, tests, comments, and docs.
+disable-model-invocation: true
 ---
 
 # Code Quality
 
-Coordinate the specialist review skills. Do not duplicate their policy here.
+Run every step in this same context. The decisions in one step constrain the next.
 
-## Contract
+## Quick Start
 
-- Review only. Do not edit files, format code, stage changes, commit, or implement fixes.
-- Select only the specialists relevant to the changed behavior.
-- Use independent reviewers concurrently when the harness supports them. Otherwise run the same specialist passes sequentially.
-- If a relevant specialist cannot be loaded, name the missing coverage instead of silently replacing it with a generic review.
+Walk the steps below and run only those the change touches. Example: adding a file
+importer to a desktop app touches the data model and boundaries (step 2), module shape
+(step 3), and a few tests for malformed input (step 6). Step 4's service logging and
+tracing guidance doesn't apply.
 
-## Specialists
+## Implementation Order
 
-- `architecture-quality`: interfaces, dependency direction, indirection, locality, control flow, and batching.
-- `correctness-design`: domain states, parsing, validation, invariants, naming, and transformations.
-- `errors-observability`: error classification, retries, fallbacks, logs, traces, and operational diagnosis.
-- `testing-discipline`: test level, regression coverage, mocks, and behavior-focused assertions.
-- `implementation-comments`: missing, stale, redundant, or misleading source comments.
-- `feature-contract-docs`: missing or stale durable feature contracts. Select this only when the change introduces or alters a feature-level contract that future maintainers need.
+1. **Design the structure.** For a new feature, module, or more than a few functions,
+   call the Skill tool with `skeleton-first`.
+   Done when: the user has approved the skeleton.
+2. **Model the data.** Call the Skill tool with `correctness-design`.
+   Done when:
+   - every place raw input enters has one function that parses it into a typed value, and
+   - every state the feature can be in is one variant of one type.
+3. **Shape the modules.** Call the Skill tool with `architecture-quality`.
+   Done when:
+   - every new public function is already called by real code in this change
+     (nothing exposed for later), and
+   - each decision about the feature's state is made in one place, with helpers
+     receiving the result instead of re-checking it.
+4. **Decide failure semantics.** When the code calls external systems, runs as a
+   service or job, retries, or falls back, call the Skill tool with
+   `errors-observability`.
+   Done when: every expected failure has a class (retryable or not, recoverable or not)
+   and a chosen response, before the happy path is written.
+5. **Write the code**, keeping the decisions above. When one turns out wrong, change it
+   on purpose and return to the step that made it.
+   Done when: it builds, the changed feature path has been run (call the Skill tool
+   with `principle-prove-it-works`), and each decision from steps 1–4 is still visible
+   in the code or was changed on purpose.
+6. **Add the tests that matter.** Call the Skill tool with `testing-discipline`.
+   Done when:
+   - each invariant from step 2 has a test that fails if the invariant breaks,
+   - every other test guards a bug fix or an edge case the design exists for, and
+   - all tests pass.
+7. **Comment the non-obvious why.** Once the code is stable, call the Skill tool with
+   `implementation-comments`.
+   Done when: every comment added states a reason the code itself can't show.
+8. **Record the contract.** When the change adds or alters durable feature behavior,
+   call the Skill tool with `feature-contract-docs`.
+   Done when: every behavior this change added or altered appears in the contract.
 
-## Workflow
-
-1. Inspect the requested scope and identify the changed behaviors and boundaries.
-2. Select the relevant specialist skills. Load and apply each selected skill in full.
-3. Ask each specialist for actionable findings with file and line evidence, severity, the rule that was violated, and the smallest practical fix.
-4. Merge findings only when they describe the same affected behavior. Preserve every contributing specialist and rule.
-5. Return findings only. A later implementation request may apply the fixes.
-
-## Output
-
-Lead with findings ordered by severity. Each finding must include:
-
-- affected file and line;
-- severity;
-- contributing specialist and rule;
-- concrete evidence and consequence;
-- smallest practical fix.
-
-If there are no findings, say so and name any review coverage or verification gaps.
+A one-function fix usually needs only steps 5 and 6.

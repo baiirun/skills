@@ -1,32 +1,50 @@
 ---
 name: errors-observability
-description: Review and improve error classification, retries, fallbacks, logging, tracing, and operational diagnosis. Use for external services, jobs, requests, background work, and other failure-sensitive production paths.
+description: Failure design for services and jobs - error classes, safe retries, deliberate fallbacks, structured logs, and tracing. Use when code calls external systems, retries or falls back, or runs as a request handler or background job.
 ---
 
 # Errors and Observability
 
-Review whether failures are safe to handle and possible to diagnose from production evidence.
+Decide failure behavior before writing the happy path. The logging and tracing guidance
+assumes a service or job; apply it where requests, jobs, or traces exist.
 
-## Principles to load
+## Quick Start
 
-- `principle-fix-root-causes` for symptom guards and error handling that hides the underlying defect.
-- `principle-make-operations-idempotent` for retries and repeated delivery.
-- `principle-boundary-discipline` for preserving error meaning across process and service boundaries.
-- `principle-prove-it-works` for failure-path verification and operational evidence.
+List every way the operation can fail, then give each one a class and a response.
+Example: a hydration step that can fail from invalid persisted state, a stale version,
+or a dependency timeout gets three distinct error tags. Only the timeout is retried,
+and the boundary logs one structured outcome.
 
-The principles supply shared rules. This skill owns failure classification, retry and fallback policy, structured event design, trace propagation, and the practical question of whether an operator can diagnose the outcome.
+## Implementation Focus
 
-## Review focus
+1. Classify each expected error as retryable or not, and recoverable or not, before
+   writing the handler.
+2. Retry only operations that are safe, bounded, idempotent, and use backoff with jitter.
+3. Fail fast on non-retryable errors, with structured context.
+4. Fall back only for recoverable degradation, and log that the fallback happened.
+5. Preserve the original error type, cause, stack, and metadata when wrapping, and add
+   the operation and key identifiers.
+6. Emit structured start and end logs at request and job boundaries.
+7. Log decisions, fallbacks, and unexpected states, not only thrown errors.
+8. Propagate trace or request IDs across boundaries and include them in logs.
 
-1. Classify expected failures by retryability, recoverability, and responsibility.
-2. Retry only safe, bounded operations with backoff, jitter, and a clear terminal outcome.
-3. Use fallbacks only for deliberate recoverable degradation and record when they activate.
-4. Preserve type, cause, stack, identifiers, and structured context when errors cross a boundary.
-5. Emit useful structured outcomes at request and job boundaries, including duration, attempts, and result.
-6. Propagate request or trace identity through queues, services, workers, and external calls.
+## Principles
 
-Read `references/review-heuristics.md` for detailed operational checks.
+- When an operation can be retried, redelivered, or rerun after a crash, call the
+  Skill tool with `principle-make-operations-idempotent`.
+- When a guard or catch would silence a symptom, call the Skill tool with
+  `principle-fix-root-causes`.
+- When errors cross a process or service boundary, call the Skill tool with
+  `principle-boundary-discipline`.
+- When verifying failure paths, call the Skill tool with `principle-prove-it-works`.
 
-## Output
+## Heuristics
 
-Order findings by severity. For each finding, name the specialist heuristic or loaded principle, identify the failure mode, cite the evidence, state the retry or recovery semantics, describe the missing diagnostic context, and propose the smallest safe fix.
+Read `references/implementation-heuristics.md` when implementing production paths,
+asynchronous jobs, external integrations, retry logic, or logging and tracing.
+
+## Before You Finish
+
+- Every catch block retries safely, falls back on purpose, or surfaces a structured error.
+- Callers can tell failure classes apart without parsing messages.
+- One log line at each boundary is enough to explain what happened.

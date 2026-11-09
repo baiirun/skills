@@ -5,7 +5,7 @@ description: Perform an explicit, aggressive cleanup of comments and suppression
 
 # No Comments
 
-Use this workflow only when the user explicitly asks for a comment-removal or no-comments pass. It is an editing workflow, unlike the read-only comment review inside `code-quality`.
+Use this workflow only when the user explicitly asks for a comment-removal or no-comments pass. It is an editing workflow over existing comments, unlike `implementation-comments`, which guides comments while writing code.
 
 ## Policy to load
 

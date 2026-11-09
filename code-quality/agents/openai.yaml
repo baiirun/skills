@@ -1,0 +1,5 @@
+interface:
+  display_name: "Code Quality"
+  short_description: "Walk a feature build through each quality step"
+policy:
+  allow_implicit_invocation: false

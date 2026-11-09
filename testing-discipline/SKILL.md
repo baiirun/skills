@@ -1,31 +1,51 @@
 ---
 name: testing-discipline
-description: Review and improve test strategy across focused unit tests, integration coverage, high-value end-to-end flows, coarse I/O mocks, and regression-first bug fixes. Use when adding or reviewing tests, fixing bugs, or judging whether a behavior change is covered.
+description: Choosing the few tests worth writing, at the cheapest level that catches the failure. Use when adding tests, fixing a bug, or deciding which tests a change needs.
 ---
 
 # Testing Discipline
 
-Choose the smallest test level that proves the behavior through the boundary most likely to fail.
+Every test must be able to go **red** for a reason you'd care about: a broken
+invariant, a mishandled edge case the design exists for, or a regressed bug. Fewer,
+sharper tests beat coverage.
 
-## Principles to load
+## Quick Start
 
-- `principle-test-behavior` when designing code for testability or judging whether assertions prove behavior rather than mirror implementation.
-- `principle-prove-it-works` for evidence that the requested behavior holds.
-- `principle-sequence-verifiable-units` when implementation order or intermediate verification affects the test plan.
+For each behavior change, name the one test that would fail if the behavior broke, and
+write that. Example: a fix for malformed imported data starts with a test feeding the
+malformed input and asserting the safe failure. Then make it pass.
 
-The principles define the need for proof. This skill owns test placement: deciding between unit, integration, and end-to-end coverage; choosing useful fakes or mocks; and keeping assertions stable across refactors.
+## Implementation Focus
 
-## Review focus
+1. Test what you'd reject an implementation over: core invariants, the edge cases the
+   data model is built to handle, and boundaries where later computation would hide a bug.
+2. Skip tests that restate types or signatures, that couldn't fail unless the compiler
+   already caught it, or that pin incidental implementation details.
+3. Choose the cheapest level that catches the failure: unit tests for pure logic and
+   parsing, integration tests for behavior across real module or I/O boundaries, and
+   end-to-end tests only for a few critical flows.
+4. Mock only coarse I/O boundaries. Use real collaborators everywhere else.
+5. For a bug fix, write the regression test first and watch it go red.
+6. Name and assert stable behavior, so refactors leave the test green.
 
-1. Use focused unit tests for pure logic, parsing, validation, invariants, and edge-heavy transformations.
-2. Prefer integration tests for behavior that crosses real module, persistence, routing, serialization, or permission boundaries.
-3. Reserve end-to-end tests for critical flows and a small set of valuable edge cases.
-4. Mock only coarse, slow, nondeterministic I/O boundaries. Avoid tests coupled to internal call order.
-5. Reproduce a bug with a regression test before changing the behavior when practical.
-6. Name and assert observable behavior rather than private implementation choreography.
+When a property needs many tests to pin down, the structure or contract is unclear.
+Call the Skill tool with `skeleton-first` and fix the structure instead of adding tests.
 
-Read `references/review-heuristics.md` when choosing test level or reviewing mocks and regression coverage.
+## Principles
 
-## Output
+- When writing assertions or shaping code for testability, call the Skill tool with
+  `principle-test-behavior`.
+- When a change spans several steps that each need a check, call the Skill tool with
+  `principle-sequence-verifiable-units`.
+- Before declaring the work done, call the Skill tool with `principle-prove-it-works`.
 
-Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, explain the uncovered behavior or brittleness, and propose the smallest useful test or test refactor.
+## Heuristics
+
+Read `references/implementation-heuristics.md` when choosing a test level, setting up
+mocks or fakes, fixing a bug, or deciding whether a change needs a test at all.
+
+## Before You Finish
+
+- Each new test goes red only for a reason you'd care about.
+- Tests assert outcomes, not call order on internal collaborators.
+- Bug fixes include a test that failed before the fix.

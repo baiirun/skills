@@ -1,40 +1,61 @@
 ---
 name: feature-contract-docs
-description: Write and review durable feature documentation covering purpose, scope, behavior, invariants, interfaces, implementation ownership, tradeoffs, and verification. Use for feature docs, capability docs, implementation notes, or ADR-like records that must preserve behavior across code changes.
+description: Feature docs written as contracts (purpose, scope, MUST and MUST NOT rules, interfaces, implementation model, verification). Use when creating or updating feature docs, capability docs, or ADR-like records.
 ---
 
 # Feature Contract Docs
 
-This is an artifact skill. It produces or reviews durable feature documentation; it is not a general review principle.
+The document should let a future agent understand why the feature exists, what
+contract it must preserve, and how the implementation relates to that contract.
 
-Inspect the implementation, tests, existing docs, and available product or issue context before writing. Describe the contract and ownership model, not a file tour or progress log.
+## Quick Start
 
-## Principles to load
+Before writing, read the implementation, tests, existing docs, and any issue or spec.
+Then write the feature as a contract, not an implementation tour or a progress log. If
+the feature went through `skeleton-first`, its contracts and invariants are the
+starting point.
 
-- `principle-experience-first` for the user or operator outcome the feature exists to provide.
-- `principle-model-the-domain` for stable concepts, states, and terminology.
-- `principle-prove-it-works` for executable or observable verification.
+## Required Shape
 
-## Required shape
-
-1. Purpose: the user or system need.
-2. Scope: what the contract covers and the non-goals needed to prevent ambiguity.
-3. Behavior contract: testable MUST, SHOULD, and MUST NOT statements.
-4. Interfaces: user and API surfaces, events, persisted entities, configuration, and external systems.
-5. Implementation model: responsibility, ownership, collaboration, and the reasons behind the shape.
+1. Purpose: why this feature exists and what user or system need it serves.
+2. Scope: what the contract covers, with explicit non-goals where they prevent ambiguity.
+3. Behavior Contract: normative MUST, SHOULD, and MUST NOT statements for flows and
+   invariants.
+4. Interfaces: user and API surfaces, events and messages, persisted entities,
+   configuration, external systems.
+5. Implementation Model: where responsibility lives, how the main pieces collaborate,
+   and why the design is shaped this way.
 6. Verification: how a human or agent can prove the contract still holds.
-7. Notes: optional non-normative context kept separate from the contract.
+7. Notes: optional non-normative context, kept separate from the contract.
 
-## Review focus
+## Writing Focus
 
-- Tie major implementation choices to a purpose, invariant, requirement, or external constraint.
-- Separate source-of-truth state from derived, cached, and display-only state.
-- Name stable semantic interfaces instead of fragile file paths.
-- Record tradeoffs only when they explain the current shape or prevent a likely mistake.
-- Keep deferred work in the project's tracking system.
+1. Tie every major implementation choice to a purpose, invariant, spec requirement, or
+   external constraint.
+2. State forbidden behavior and illegal states as MUST NOT statements.
+3. Separate source-of-truth facts from derived, cached, or display-only state.
+4. Name stable semantic interfaces instead of touring files.
+5. Record tradeoffs and rejected alternatives only when they explain the current shape.
+6. Put deferred work in non-goals or tracked work.
+7. Tie verification to observable contract behavior, not incidental implementation details.
 
-Read `references/review-heuristics.md` for document placement and contract-quality checks.
+## Principles
 
-## Output
+- When writing the purpose and scope, call the Skill tool with
+  `principle-experience-first`.
+- When naming the feature's concepts and states, call the Skill tool with
+  `principle-model-the-domain`.
+- When writing the verification section, call the Skill tool with
+  `principle-prove-it-works`.
 
-When writing, use the required shape with concise sections. When reviewing, order findings by severity and cite the missing or stale contract knowledge, its consequence, and the smallest documentation fix.
+## Heuristics
+
+Read `references/implementation-heuristics.md` when writing a feature contract,
+deciding between a feature contract and an ADR, or deciding whether an implementation
+change needs a doc update.
+
+## Before You Finish
+
+- Every MUST and MUST NOT is something a test or a person could check.
+- The doc would survive renaming every file it mentions.
+- Changed behavior in this change is reflected in the contract.

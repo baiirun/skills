@@ -1,35 +1,54 @@
 ---
 name: architecture-quality
-description: Review and improve module boundaries, interface depth, dependency direction, control-flow locality, batching, and avoidable indirection. Use when designing or reviewing abstractions, service interfaces, dependency injection, helper extraction, batching, or refactors.
+description: Deep modules, late abstraction, locality of behavior, and push ifs up, fors down. Use when creating or changing abstractions, module boundaries, or interfaces, or when extracting helpers.
 ---
 
 # Architecture Quality
 
-Review whether the code places responsibility where a maintainer can understand and change it safely.
+## Quick Start
 
-## Principles to load
+Before extracting a helper or adding an interface, write the call site first and ask
+whether the new piece makes it clearer. Example: instead of a `UserServiceManager` with
+one implementation and broad methods, call the concrete code directly until a second
+implementation or a volatile dependency gives the interface a reason to exist.
 
-Load these principle skills when they apply:
+## Implementation Focus
 
-- `principle-laziness-protocol` for speculative abstractions and changes larger than the evidence supports.
-- `principle-minimize-reader-load` for interface depth, pass-through layers, locality, and navigation cost.
-- `principle-foundational-thinking` for data shape, ownership, and module structure.
-- `principle-boundary-discipline` for framework, transport, persistence, or vendor details crossing the wrong seam.
-- `principle-separate-logic-state-and-effects` when business decisions depend on hidden state, I/O, caching, scheduling, or physical storage choices.
+1. Abstract late. Write it concretely first; extract when repeated usage or real
+   variation shows the shape.
+2. Make interfaces narrow. Expose only what the consumer needs, defined from the
+   consumer's side.
+3. Build **deep modules**: a small interface with real behavior behind it. A layer
+   that only forwards calls is shallow; call through it directly. Add a layer only
+   when it owns policy, narrows a type, manages a lifecycle, or adapts a boundary.
+4. Keep behavior where a maintainer will look for it: same function, then same file,
+   then a nearby module.
+5. **Push ifs up, fors down.** Make each decision once, in the parent operation, and
+   hand leaf helpers the result so they do straight-line work. Give hot paths batch
+   interfaces: decide once, then loop.
+6. Pass dependencies in, as small interfaces shaped by the consumer.
 
-The principles supply shared rules. This skill owns the architecture review: applying those rules across modules, assessing dependency direction, deciding whether control flow is centralized enough to verify, and identifying useful batch interfaces.
+## Principles
 
-## Review focus
+- When the change grows larger than the problem, or a new layer or threaded signal
+  appears, call the Skill tool with `principle-laziness-protocol`.
+- When answering "where does X come from?" needs several hops or hidden state, call
+  the Skill tool with `principle-minimize-reader-load`.
+- Before writing logic on new core types, call the Skill tool with
+  `principle-foundational-thinking`.
+- When framework, transport, persistence, or vendor types approach business logic,
+  call the Skill tool with `principle-boundary-discipline`.
+- When decisions depend on mutable state, I/O, caching, or scheduling, call the Skill
+  tool with `principle-separate-logic-state-and-effects`.
 
-1. Judge abstractions by the complexity they hide at their call sites and the real variation they contain.
-2. Define interfaces from consumer needs and keep infrastructure details behind their owning boundary.
-3. Keep policy and branching visible in one place when scattering them would make behavior harder to verify.
-4. Preserve locality. A helper or layer should own policy, validation, lifecycle, adaptation, or another meaningful responsibility.
-5. Prefer batch operations when they remove repeated setup or decisions from a common or hot loop without obscuring per-item failures or ordering.
-6. Point dependencies from high-level policy toward narrow ports rather than concrete infrastructure.
+## Heuristics
 
-Read `references/review-heuristics.md` for a detailed architecture review.
+Read `references/implementation-heuristics.md` when designing a new abstraction,
+splitting a large function, deciding whether to split or merge modules, or shaping an
+interface over many items.
 
-## Output
+## Before You Finish
 
-Order findings by severity. For each finding, name the specialist heuristic or loaded principle, cite the evidence, explain the coupling or maintenance cost, and propose the smallest design change that restores clarity.
+- Every new abstraction has a second user, a volatile dependency, or a boundary to adapt.
+- Every function does more than forward its arguments.
+- One user action can be followed without hopping through registration layers.

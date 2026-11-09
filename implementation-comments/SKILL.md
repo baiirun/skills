@@ -1,31 +1,49 @@
 ---
 name: implementation-comments
-description: Write and review source comments that explain non-obvious local intent, invariants, requirements, tradeoffs, failure semantics, or external constraints. Use when adding or reviewing inline comments, block comments, workaround notes, deferred-work comments, or commented-out code.
+description: Why-comments in source code, and clearer code where a rename or extraction does the job. Use when writing or editing code comments, workaround notes, or commented-out code.
 ---
 
 # Implementation Comments
 
-This skill owns the repository's general policy for source comments. A comment should preserve a local reason the code cannot express clearly by itself.
+This skill owns the repository's general policy for source comments. Comment once the
+code is close to final. A comment earns its place by telling the reader something the
+code can't: why it's shaped this way, which invariant or spec requirement it protects,
+or which external constraint forces it.
 
-Use `no-comments` only when the user explicitly asks for an aggressive cleanup pass that removes comments and suppressions and implements small root-cause fixes. That workflow loads this skill for policy.
+For an explicit, aggressive cleanup pass that removes comments and suppressions, the
+user runs `no-comments`, which uses this skill for policy.
 
-## Principles to load
+## Quick Start
 
-- `principle-minimize-reader-load` for narration, duplication, and comments that increase reading cost.
-- `principle-encode-lessons-in-structure` when a type, assertion, test, name, or lint rule can enforce the lesson.
+For each spot a reader might stop and ask "why?", first try to make the code answer it
+with a rename or small extraction. If it still can't, write one comment with the
+reason. Example: a retry loop that deliberately skips a provider error says why that
+error is terminal, not that the loop iterates attempts.
 
-## Review focus
+## Implementation Focus
 
-1. Keep comments that explain local intent, an invariant, a requirement, a tradeoff, surprising failure behavior, or an external constraint.
-2. Remove comments that translate nearby syntax into prose.
-3. Keep the explanation beside the behavior it governs and narrow its scope.
-4. Rewrite or remove stale, vague, and misleading comments.
-5. Prefer a small code clarification when it can express the same fact without commentary.
-6. Move deferred work to the project's tracking system.
-7. Delete commented-out code unless it represents an intentionally disabled path with a current reason and removal condition.
+1. Write comments that explain local intent, constraints, invariants, spec
+   requirements, tradeoffs, and surprising behavior.
+2. Put each comment right next to the behavior or invariant it explains.
+3. When you change code, update or delete the comments that describe it.
+4. Rename or extract before commenting, when that removes the confusion.
+5. Track deferred work outside the source, in the project's tracker.
+6. Delete commented-out code, unless it's an intentionally disabled path with a stated
+   reason.
 
-Read `references/review-heuristics.md` for detailed authoring and review guidance.
+## Principles
 
-## Output
+- When a comment narrates code or adds reading cost, call the Skill tool with
+  `principle-minimize-reader-load`.
+- When a type, assertion, test, name, or lint rule could enforce what the comment
+  says, call the Skill tool with `principle-encode-lessons-in-structure`.
 
-For authored comments, write only the necessary local explanation. For reviews, order findings by severity and propose the smallest action: keep, remove, rewrite, relocate, link to a durable contract, or encode the rule in code or tests.
+## Heuristics
+
+Read `references/implementation-heuristics.md` when commenting complex code, deciding
+whether to clarify code instead of commenting, or writing workaround notes.
+
+## Before You Finish
+
+- Every comment states a why the code can't show.
+- Deferred work is tracked outside the source, and no commented-out block was added.
