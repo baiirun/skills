@@ -9,7 +9,7 @@ The skills use capability-based instructions. They may use delegation, model sel
 - **Principles** are plain markdown files in [`principles/`](principles/). Each holds one atomic decision rule with the condition that triggers it. They are not skills, so they cost no always-loaded context.
 - **Routing skills** are model-invoked skills, one per kind of problem. Each maps the conditions it covers to the principle files to read, so an agent loads only the rules that apply. Skills that read principles reach them through a `principles` symlink to `../principles`, so `principles/<name>.md` resolves from any harness's skill directory.
 - **Workflows** sequence steps for a concrete task: designing a skeleton, writing feature docs, cleaning up comments.
-- **`code-quality`** is the user-invoked step order for building a feature. Each step calls the matching routing skill.
+- **`code-quality`** is the user-invoked router: it maps the kind of work to the routing skill, workflow, or single principle that covers it.
 
 ## Routing skills
 
@@ -25,7 +25,7 @@ The skills use capability-based instructions. They may use delegation, model sel
 
 ## Implementation
 
-- [`code-quality`](code-quality/SKILL.md): User-invoked (`/code-quality`). Walks an implementation through data model, structure, failure semantics, tests, comments, and docs, calling a routing skill at each step. For reviewing code, use a dedicated review skill or agent.
+- [`code-quality`](code-quality/SKILL.md): User-invoked (`/code-quality`). Routes implementation work to the matching routing skills, workflows, and principles; it prescribes no step order. For reviewing code, use a dedicated review skill or agent.
 - [`skeleton-first`](skeleton-first/SKILL.md): Before implementing a non-trivial feature, writes a compiling skeleton of types, module boundaries, signatures, short contracts, and a few high-value tests, then waits for approval. Based on arXiv 2610.38214.
 - [`feature-contract-docs`](feature-contract-docs/SKILL.md): Writes durable feature contracts that model purpose, scope, behavior, invariants, interfaces, implementation model, and verification.
 - [`no-comments`](no-comments/SKILL.md): Explicit cleanup pass over existing comments and suppressions, using [`principles/comment-the-why.md`](principles/comment-the-why.md) as its policy.

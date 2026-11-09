@@ -1,56 +1,62 @@
 ---
 name: code-quality
-description: Walk a feature build through data model, structure, failures, tests, comments, and docs.
+description: Route implementation work to the code-quality skills and principles that cover it.
 disable-model-invocation: true
 ---
 
 # Code Quality
 
-Run every step in this same context. The decisions in one step constrain the next.
+Find each row whose condition matches the work and load what it names. Load only the matching rows; a one-function fix might match one row, a new feature several. When several match, the order does not matter.
 
-## Quick Start
+## Skills
 
-Walk the steps below and run only those the change touches. Example: adding a file
-importer to a desktop app touches the data model and boundaries (step 2), module shape
-(step 3), and a few tests for malformed input (step 6). Step 4's service logging and
-tracing guidance doesn't apply.
+Each routing skill maps its own conditions to principle files. Call the Skill tool with the skill named in each matching row.
 
-## Implementation Order
+| When the work involves | Call |
+|---|---|
+| A new feature or module, more than a few new functions, or work handed to subagents | `skeleton-first` |
+| Types, signatures, parsing raw input, naming, runtime checks, or converting data | `modeling-data` |
+| Modules, interfaces, abstractions, splitting functions, or a refactor's target shape | `designing-structure` |
+| External calls, code that can fail, retries, fallbacks, request handlers, or jobs | `handling-failure` |
+| Several actors writing the same state, or work that must survive crashes and reruns | `sharing-state` |
+| Refactors, migrations, phased rewrites, or a requirement the design didn't anticipate | `changing-existing-code` |
+| Choosing tests, fixing a bug, sequencing a multi-step change, or proving work is done | `testing-and-verifying` |
+| Writing or editing source comments, or an instruction repeated a second time | `documenting-code` |
+| An explicit cleanup pass over comments and suppressions in a diff | `no-comments` |
+| Reading or editing TypeScript | `typescript-best-practices` |
 
-1. **Design the structure.** For a new feature, module, or more than a few functions,
-   call the Skill tool with `skeleton-first`.
-   Done when: the user has approved the skeleton.
-2. **Model the data.** Call the Skill tool with `modeling-data`.
-   Done when:
-   - every place raw input enters has one function that parses it into a typed value, and
-   - every state the feature can be in is one variant of one type.
-3. **Shape the modules.** Call the Skill tool with `designing-structure`.
-   Done when:
-   - every new public function is already called by real code in this change
-     (nothing exposed for later), and
-   - each decision about the feature's state is made in one place, with helpers
-     receiving the result instead of re-checking it.
-4. **Decide failure semantics.** When the code calls external systems, runs as a
-   service or job, retries, or falls back, call the Skill tool with
-   `handling-failure`. When several actors write shared state or work must survive
-   reruns, also call the Skill tool with `sharing-state`.
-   Done when: every expected failure has a class (retryable or not, recoverable or not)
-   and a chosen response, before the happy path is written.
-5. **Write the code**, keeping the decisions above. When one turns out wrong, change it
-   on purpose and return to the step that made it.
-   Done when: it builds, the changed feature path has been run (see
-   `principles/prove-it-works.md`), and each decision from steps 1–4 is still visible in
-   the code or was changed on purpose.
-6. **Add the tests that matter.** Call the Skill tool with `testing-and-verifying`.
-   Done when:
-   - each invariant from step 2 has a test that fails if the invariant breaks,
-   - every other test guards a bug fix or an edge case the design exists for, and
-   - all tests pass.
-7. **Comment the non-obvious why.** Once the code is stable, call the Skill tool with
-   `documenting-code`.
-   Done when: every comment added states a reason the code itself can't show.
-8. **Record the contract.** When the change adds or alters durable feature behavior,
-   call the Skill tool with `feature-contract-docs`.
-   Done when: every behavior this change added or altered appears in the contract.
+## Principles
 
-A one-function fix usually needs only steps 5 and 6.
+When one rule is all the work needs, read the principle directly instead of loading a whole skill. Each file is short; read it in full.
+
+| When the work involves | Read |
+|---|---|
+| Deciding where runtime checks and assertions go | `principles/assert-at-boundaries.md` |
+| Wiring validation, error handling, or framework adapters | `principles/boundary-discipline.md` |
+| Code that can fail: external calls, I/O, parsing, jobs, handlers | `principles/classify-failures.md` |
+| Source comments, workaround notes, or commented-out code | `principles/comment-the-why.md` |
+| Adding or changing an interface, extracting a helper, or supplying a dependency | `principles/consumer-shaped-interfaces.md` |
+| Writing the same instruction a second time, or a recurring correction | `principles/encode-lessons-in-structure.md` |
+| A novel interaction or architectural decision with no precedent | `principles/exhaust-the-design-space.md` |
+| Debugging | `principles/fix-root-causes.md` |
+| Choosing core types and data structures before writing logic | `principles/foundational-thinking.md` |
+| A growing diff, or the urge to add layers, abstractions, or signal threading | `principles/laziness-protocol.md` |
+| Commands, lifecycle steps, or loops that run amid crashes, restarts, and retries | `principles/make-operations-idempotent.md` |
+| A new internal API while old callers still exist | `principles/migrate-callers-then-delete-legacy-apis.md` |
+| Code that is hard to trace: layers, wrappers, hidden state | `principles/minimize-reader-load.md` |
+| Stateful logic, heavy branching, or a shape assumption repeated across files | `principles/model-the-domain.md` |
+| Naming domain concepts, units, same-typed parameters, or nullable values | `principles/name-precisely.md` |
+| Request handlers, jobs, workers, or calls across services | `principles/observable-boundaries.md` |
+| A planned rewrite or migration with explicit phases | `principles/outcome-oriented-execution.md` |
+| Finishing a task, before declaring it done | `principles/prove-it-works.md` |
+| Placing branches, splitting functions, or an operation over many items | `principles/push-ifs-up-fors-down.md` |
+| Integrating a new requirement into an existing design | `principles/redesign-from-first-principles.md` |
+| Adding a retry, a fallback, or default behavior on failure | `principles/safe-retries-and-fallbacks.md` |
+| Concurrent actors that might write the same file, branch, key, or state | `principles/separate-before-serializing-shared-state.md` |
+| Business decisions mixed with mutable state, I/O, caching, or scheduling | `principles/separate-logic-state-and-effects.md` |
+| Multi-step work, or stacking commits and PRs | `principles/sequence-verifiable-units.md` |
+| Sequencing an addition, refactor, or rewrite | `principles/subtract-before-you-add.md` |
+| Designing for testability, or writing and reviewing tests | `principles/test-behavior.md` |
+| Deciding which tests a change needs and at which level | `principles/test-what-you-would-reject.md` |
+| Converting, migrating, or updating data | `principles/total-transformations.md` |
+| Designing types or function signatures | `principles/type-system-discipline.md` |

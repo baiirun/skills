@@ -1,5 +1,5 @@
 interface:
   display_name: "Code Quality"
-  short_description: "Walk a feature build through each quality step"
+  short_description: "Route work to the matching quality skills and principles"
 policy:
   allow_implicit_invocation: false
