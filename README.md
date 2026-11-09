@@ -34,6 +34,10 @@ These skills were ported from [Cursor's pstack collection](https://github.com/cu
 
 `tdd` and `make-bot-ui` are intentionally excluded.
 
+## Design
+
+- [`skeleton-first`](skeleton-first/SKILL.md): Before implementing a non-trivial feature, writes a compiling skeleton of types, module boundaries, signatures, short contracts, and a few high-value tests, then waits for approval. Based on arXiv 2610.38214.
+
 ## Refactoring
 
 - [`untangle-codebase`](untangle-codebase/SKILL.md): Runs a whole-codebase refactor in one pass so agents read less per change, break less silently, and debug faster. Invoke explicitly; it does not auto-trigger. Vendored from [caldoai/skills](https://github.com/caldoai/skills/tree/main/skills/untangle-codebase).
