@@ -38,6 +38,10 @@ These skills were ported from [Cursor's pstack collection](https://github.com/cu
 
 - [`untangle-codebase`](untangle-codebase/SKILL.md): Runs a whole-codebase refactor in one pass so agents read less per change, break less silently, and debug faster. Invoke explicitly; it does not auto-trigger. Vendored from [caldoai/skills](https://github.com/caldoai/skills/tree/main/skills/untangle-codebase).
 
+## Explanation
+
+- [`show-me`](show-me/SKILL.md): Explains the current topic visually with the smallest fitting view: pseudocode, trees, Mermaid diagrams, diffs, or focused HTML artifacts. Vendored from [humanlayer/skills](https://github.com/humanlayer/skills) at `3c262914`.
+
 ## References
 
 Some skills include deeper guidance under `references/`, executable helpers under `scripts/`, or workflow-specific playbooks. Load only the resources named by the active skill.
