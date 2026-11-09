@@ -113,7 +113,7 @@ Use local git for source control and a hosting client when one is available. For
 
 Aim for a complete **coverage map**, not a minimal one. A null result from an issue tracker is evidence the decision was not ticketed, a useful fact in itself. Document the null, don't skip the search.
 
-Launch matching investigators together when the harness supports delegation and concurrency. Use `why-investigators` from the optional pstack model configuration or inherit the parent model. One investigator per category lets each specialize in one source's query vocabulary and result shape. If delegation is unavailable, search categories sequentially. Investigators may use read-only evidence capabilities but must not write files or mutate external systems.
+Launch matching investigators together when the harness supports delegation and concurrency. One investigator per category lets each specialize in one source's query vocabulary and result shape. If delegation is unavailable, search categories sequentially. Investigators may use read-only evidence capabilities but must not write files or mutate external systems.
 
 Each investigator gets:
 1. The base prompt from `references/investigator-prompt.md`
@@ -155,7 +155,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 ## Step 4. Synthesize
 
-Use one synthesizer through the harness's delegation mechanism when available, selecting `why-synthesizer` from the optional pstack model configuration or inheriting the parent model. It may use read-only evidence capabilities to spot-check citations but must not mutate files or external systems. If delegation is unavailable, synthesize in the parent.
+Use one synthesizer through the harness's delegation mechanism when available. It may use read-only evidence capabilities to spot-check citations but must not mutate files or external systems. If delegation is unavailable, synthesize in the parent.
 
 The synthesizer gets:
 1. The investigator findings, including any null results and any categories skipped with justification

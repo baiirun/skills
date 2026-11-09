@@ -42,7 +42,7 @@ Decompose the question into 2-4 parallel exploration angles, each a distinct sli
 
 The right decomposition depends on the question. Use your judgment. Narrow questions: 2 explorers is fine. Broad subsystems: up to 4.
 
-Launch all explorers together through the harness's delegation mechanism when available. Use `how-explorer` from the optional pstack model configuration or inherit the parent model. Give them read-only instructions. If delegation is unavailable, explore each angle sequentially in the parent.
+Launch all explorers together through the harness's delegation mechanism when available. Give them read-only instructions. If delegation is unavailable, explore each angle sequentially in the parent.
 
 Each explorer gets the same base prompt from `references/explorer-prompt.md` plus a specific exploration angle naming its slice. Each explorer should:
 - Start broad: use the available file search and text search capabilities to find relevant directories, types, interfaces, and class names
@@ -57,7 +57,7 @@ Then proceed to Step 3.
 
 ### Step 2b. Direct Explain (simple questions)
 
-Use one delegated worker when available, with `how-explainer` from the optional pstack model configuration or the inherited parent model. Give it read-only instructions. Otherwise explore and explain directly in the parent.
+Use one delegated worker when available. Give it read-only instructions. Otherwise explore and explain directly in the parent.
 
 The worker uses the available file listing, text search, and file reading capabilities, then writes the explanation directly. Read `references/explainer-prompt.md` for the communication style and output format.
 
@@ -65,7 +65,7 @@ Proceed to Step 4.
 
 ### Step 3. Synthesize (complex questions only)
 
-Once all explorers return, use one delegated worker to synthesize their findings when available. Select `how-explainer` from the optional pstack model configuration or inherit the parent model. Otherwise synthesize directly in the parent.
+Once all explorers return, use one delegated worker to synthesize their findings when available. Otherwise synthesize directly in the parent.
 
 The explainer gets all explorers' findings and writes the human-facing explanation (output format below). Read `references/explainer-prompt.md` for the full prompt template. The explainer reconciles overlapping findings, resolves contradictions, and weaves the slices into a unified picture.
 
@@ -97,7 +97,7 @@ Run the full explain flow above (Steps 1-4). You must understand the architectur
 
 ### Step 2. Run Critics
 
-After the explanation is complete, run one architectural critic per entry in `how-critics` from the optional pstack model configuration. With no configuration, run at least two independent inherited-model critics. Launch them together when the harness supports delegation and concurrency; otherwise run them sequentially. Give every critic read-only instructions.
+After the explanation is complete, run at least two independent architectural critics. Launch them together when the harness supports delegation and concurrency; otherwise run them sequentially. Give every critic read-only instructions.
 
 Read `references/critic-prompt.md` for the prompt template. Each critic gets:
 1. The explanation from Step 1 (so they don't re-explore)
@@ -106,7 +106,7 @@ Read `references/critic-prompt.md` for the prompt template. Each critic gets:
 
 ### Step 3. Lead Judgment
 
-Same framework as the interrogate skill. You're a pragmatic lead, not an aggregator.
+You're a pragmatic lead, not an aggregator.
 
 Categorize findings:
 - **Act on.** Architectural problems worth fixing now

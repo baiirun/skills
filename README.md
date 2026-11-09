@@ -17,7 +17,7 @@ Use a specialist directly for narrow work. Use a coordinator only when the work 
 
 ## Code quality
 
-The code-quality skills guide implementation, not review. For reviewing code, use a review workflow such as [`interrogate`](interrogate/SKILL.md).
+The code-quality skills guide implementation, not review. For reviewing code, use a dedicated review skill or agent.
 
 - [`code-quality`](code-quality/SKILL.md): User-invoked (`/code-quality`). Walks an implementation through data model, structure, failure semantics, tests, comments, and docs, calling each specialist at the step where it applies.
 - [`architecture-quality`](architecture-quality/SKILL.md): Designs abstractions, interfaces, dependency direction, control-flow placement, batching, and locality of behavior.
@@ -41,9 +41,9 @@ The code-quality skills guide implementation, not review. For reviewing code, us
 
 - [`show-me`](show-me/SKILL.md): Explains the current topic visually with the smallest fitting view: pseudocode, trees, Mermaid diagrams, diffs, or focused HTML artifacts. Vendored from [humanlayer/skills](https://github.com/humanlayer/skills) at `3c262914`.
 
-## Pstack workflows
+## Pstack skills
 
-The pstack skills cover architecture, investigation, adversarial review, verification, orchestration, technical writing, and working-style automation. The `principle-*` skills hold the focused design and execution rules used by those workflows.
+The `how`, `why`, `teach`, `technical-writing`, `unslop`, `typescript-best-practices`, `no-comments`, and `principle-*` skills hold the remaining pstack investigation, writing, and design rules.
 
 These skills were ported from [Cursor's pstack collection](https://github.com/cursor/plugins/tree/main/pstack/skills). Cursor-only paths, metadata, tool arguments, model identifiers, review-bot behavior, and plugin dependencies were replaced with harness-neutral capability checks and fallbacks.
 
