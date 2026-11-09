@@ -1,6 +1,6 @@
 ---
 name: skeleton-first
-description: Before implementing a non-trivial feature or module, design a compiling code skeleton (types, module boundaries, signatures, short contracts, and a few high-value tests) and get user approval before writing any implementation. Use when a task introduces new data types, more than ~3 functions, a new module, or work that will be handed to subagents. Skip for one-function changes and bug fixes in existing structure.
+description: Before implementing a non-trivial feature or module, design a compiling code skeleton (types, module boundaries, signatures, short contracts, and a few high-value tests) and get user approval (the default) before writing any implementation. Use when a task introduces new data types, more than ~3 functions, a new module, or work that will be handed to subagents. Skip for one-function changes and bug fixes in existing structure.
 ---
 
 # Skeleton-first
@@ -38,14 +38,9 @@ structure first, as code, and have the user review it.
   memory, ordering).
 
 ## Phase 3: A few tests that matter
-- Write tests only for behavior you'd reject an implementation over: the core
-  invariants, the edge cases the data model is meant to handle, and boundaries
-  where a bug would be hidden by later computation.
-- Don't write one test per contract clause. Skip tests that restate types or
-  signatures, or that couldn't fail without the compiler catching it first.
-- If a property needs many tests to pin down, the structure or contract is the
-  problem. Fix that instead of adding tests.
-- Mark tests pending/ignored until their component exists.
+Call the Skill tool with `testing-discipline` and write only the tests it calls for,
+aimed at the skeleton's contracts and invariants. Mark them pending or ignored until
+their component exists.
 
 ## Phase 4: Review gate
 Show the user:
@@ -53,7 +48,10 @@ Show the user:
 - a short list of the decisions it encodes and the alternatives rejected
 - open questions where the contract is ambiguous
 
-Don't implement until the user approves. Offer to commit the skeleton by itself
+Gate by default: wait for the user's approval before implementing. Skip the gate only
+when the user has said to proceed without review for this task, and then state the
+skeleton's key decisions in your reply so they can still course-correct. Offer to
+commit the skeleton by itself
 (`chore: skeleton for <feature>`) so later diffs show implementation separately.
 
 ## Phase 5: Implement component by component

@@ -1,13 +1,15 @@
 # Testing Discipline Implementation Heuristics
 
+What a test asserts, how it uses mocks, and how it avoids tautological or
+change-detector tests live in `principle-test-behavior`. This file covers how many
+tests to write and at which level.
+
 ## Deciding Whether to Test
 
 - Write a test when its failure would show a broken invariant, a mishandled edge case
   the design exists for, a violated contract at a component boundary, or a regressed bug.
-- Don't write a test that restates a type, checks that a constructor stores its fields,
-  or would only fail if the compiler or type checker were already failing.
-- Don't write a test that pins the current implementation's private steps. It breaks on
-  every refactor and catches nothing.
+- Leave out tests that restate a type, check that a constructor stores its fields, or
+  could only fail if the compiler or type checker were already failing.
 - When many cases share a shape, write one table-driven test instead of many copies.
 
 ## Unit Tests
@@ -21,20 +23,12 @@
 - Use integration tests for behavior that depends on several modules, persistence,
   routing, serialization, permissions, or boundary adapters.
 - Use real implementations where practical. Fake only slow or nondeterministic I/O.
-- Assert observable behavior: outputs, persisted state, emitted events, user-visible errors.
 
 ## End-to-End Tests
 
 - Reserve end-to-end tests for a few critical flows and high-value edge cases.
-- Don't repeat integration scenarios at the end-to-end level.
-- Assert outcomes, not timing or styling, unless the feature is visual.
-
-## Mocks
-
-- Mock coarse I/O boundaries: network providers, payment gateways, clocks, queues,
-  filesystem access.
-- Don't mock internal collaborators just to assert call order.
-- Use fakes or fixtures when they make the behavior clearer than a mock would.
+- Cover each scenario at one level. An end-to-end test that repeats an integration
+  scenario adds runtime and no new signal.
 
 ## Regression Bugs
 

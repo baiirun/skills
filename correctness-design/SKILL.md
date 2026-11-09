@@ -5,7 +5,9 @@ description: Parse, don't validate, and make illegal states unrepresentable. Use
 
 # Correctness Design
 
-Prefer structures that can't hold a bad value over checks that catch one later.
+Strong types are the ideal. The skeleton's types and the domain model carry the
+invariants, so a bad value can't be built. Assertions guard the boundaries the types
+can't reach.
 
 ## Quick Start
 
@@ -16,32 +18,34 @@ typed event, and everything inward takes that event, never the raw JSON.
 ## Implementation Focus
 
 1. **Parse, don't validate.** Turn raw input into a typed value once, at the boundary,
-   and pass that inward. Inner code relies on the type instead of re-checking.
-2. **Make illegal states unrepresentable**: tagged variants, constructors that
-   validate, schemas.
+   and pass that inward.
+2. **Make illegal states unrepresentable.** Model variants as one tagged type.
 3. Name domain concepts, units, ownership, lifecycle, and states precisely enough that
    misuse reads as wrong.
-4. Put each invariant next to the data or state it protects.
-5. Assert critical inputs, outputs, invariants, and state transitions.
-6. Design for the negative space too: invalid input, boundaries, and transitions get a
-   defined outcome.
+4. Assert at boundaries: where raw input enters, before side effects, and at state
+   transitions that cross components. Inside, rely on the types.
+5. Give every input a defined outcome: invalid input, edge values, and transitions
+   included.
+6. Write total transformations, and build the new value before replacing the old one so
+   a failure leaves nothing half-changed.
 
 ## Principles
 
-- When logic branches on scattered booleans, phases, or repeated shape assumptions,
-  call the Skill tool with `principle-model-the-domain`.
-- When designing types or signatures in a statically typed language, call the Skill
-  tool with `principle-type-system-discipline`.
-- When deciding where validation and error handling go, call the Skill tool with
+These own the general rules. Call them when their trigger appears:
+
+- Domain states, transitions, or logic that branches on scattered booleans: call the
+  Skill tool with `principle-model-the-domain`.
+- Designing types or signatures: call the Skill tool with
+  `principle-type-system-discipline`.
+- Deciding where parsing, validation, and error handling go: call the Skill tool with
   `principle-boundary-discipline`.
-- When deciding where branching and precondition checks live, call the Skill tool with
-  `architecture-quality`.
+- Deciding which values are stored and which are derived: call the Skill tool with
+  `principle-separate-logic-state-and-effects`.
 
 ## Heuristics
 
-Read `references/implementation-heuristics.md` when designing input handling, data
-models, transformations, or state machines, when naming unit-sensitive or same-typed
-values, or when working in code that has produced correctness bugs before.
+Read `references/implementation-heuristics.md` when naming unit-sensitive, same-typed,
+or nullable values, or when writing transformations and state transitions.
 
 ## Before You Finish
 
