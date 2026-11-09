@@ -38,7 +38,7 @@ structure first, as code, and have the user review it.
   memory, ordering).
 
 ## Phase 3: A few tests that matter
-Call the Skill tool with `testing-discipline` and write only the tests it calls for,
+Call the Skill tool with `testing-and-verifying` and write only the tests it calls for,
 aimed at the skeleton's contracts and invariants. Mark them pending or ignored until
 their component exists.
 

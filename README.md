@@ -2,53 +2,52 @@
 
 This repository contains reusable agent skills. Each skill lives in its own directory with a `SKILL.md` entrypoint and optional references or scripts.
 
-The skills use capability-based instructions. They may use delegation, model selection, conversation history, connectors, or recurring monitoring when the active agent harness provides those features, and they define fallbacks when it does not.
+The skills use capability-based instructions. They may use delegation, model selection, or connectors when the active agent harness provides those features, and they define fallbacks when it does not.
 
-## Skill roles
+## How the pieces fit
 
-Skills in this repository have four roles:
+- **Principles** are plain markdown files in [`principles/`](principles/). Each holds one atomic decision rule with the condition that triggers it. They are not skills, so they cost no always-loaded context.
+- **Routing skills** are model-invoked skills, one per kind of problem. Each maps the conditions it covers to the principle files to read, so an agent loads only the rules that apply. Skills that read principles reach them through a `principles` symlink to `../principles`, so `principles/<name>.md` resolves from any harness's skill directory.
+- **Workflows** sequence steps for a concrete task: designing a skeleton, writing feature docs, cleaning up comments.
+- **`code-quality`** is the user-invoked step order for building a feature. Each step calls the matching routing skill.
 
-- Coordinators sequence work without repeating specialist policy. [`code-quality`](code-quality/SKILL.md) walks an implementation through the code-quality specialists.
-- Specialists apply several principles to one kind of design decision or artifact. The code-quality specialists cover architecture, correctness, failures, tests, source comments, and feature contracts.
-- `principle-*` skills contain atomic decision rules that other skills can compose. They do not own broad workflows or output formats.
-- Workflows sequence actions, tools, and verification for a concrete task.
+## Routing skills
 
-Use a specialist directly for narrow work. Use a coordinator only when the work crosses several specialist concerns.
+| Skill | Fires for |
+|---|---|
+| [`designing-structure`](designing-structure/SKILL.md) | Modules, interfaces, abstractions, function structure, a refactor's target shape |
+| [`modeling-data`](modeling-data/SKILL.md) | Types, input parsing, naming, runtime checks, data transformations |
+| [`handling-failure`](handling-failure/SKILL.md) | Error classes, retries, fallbacks, idempotency, logs, tracing |
+| [`testing-and-verifying`](testing-and-verifying/SKILL.md) | Choosing tests, assertions, bug fixes, proving work is done |
+| [`changing-existing-code`](changing-existing-code/SKILL.md) | Refactors, migrations, new requirements in existing designs |
+| [`sharing-state`](sharing-state/SKILL.md) | Concurrent writers, work that must survive crashes and reruns |
+| [`documenting-code`](documenting-code/SKILL.md) | Source comments, recurring rules, feature docs |
 
-## Code quality
+## Implementation
 
-The code-quality skills guide implementation, not review. For reviewing code, use a dedicated review skill or agent.
-
-- [`code-quality`](code-quality/SKILL.md): User-invoked (`/code-quality`). Walks an implementation through data model, structure, failure semantics, tests, comments, and docs, calling each specialist at the step where it applies.
-- [`architecture-quality`](architecture-quality/SKILL.md): Designs abstractions, interfaces, dependency direction, control-flow placement, batching, and locality of behavior.
-- [`correctness-design`](correctness-design/SKILL.md): Designs boundary parsing, illegal-state-free data models, naming, invariants, assertions, and total transformations.
-- [`errors-observability`](errors-observability/SKILL.md): Designs service and job failure behavior: error classes, retries, fallbacks, structured logging, and tracing.
-- [`feature-contract-docs`](feature-contract-docs/SKILL.md): Writes durable feature contracts that model purpose, scope, behavior, invariants, interfaces, implementation model, and verification.
-- [`implementation-comments`](implementation-comments/SKILL.md): Writes source comments that carry non-obvious why, and prefers clearer code where a rename or extraction suffices.
-- [`testing-discipline`](testing-discipline/SKILL.md): Chooses the few tests worth writing, their level, mock boundaries, and regression-first bug fixes.
-
-[`implementation-comments`](implementation-comments/SKILL.md) owns the general source-comment policy. [`no-comments`](no-comments/SKILL.md) is the explicit editing workflow for aggressive comment and suppression cleanup.
-
-## Design
-
+- [`code-quality`](code-quality/SKILL.md): User-invoked (`/code-quality`). Walks an implementation through data model, structure, failure semantics, tests, comments, and docs, calling a routing skill at each step. For reviewing code, use a dedicated review skill or agent.
 - [`skeleton-first`](skeleton-first/SKILL.md): Before implementing a non-trivial feature, writes a compiling skeleton of types, module boundaries, signatures, short contracts, and a few high-value tests, then waits for approval. Based on arXiv 2610.38214.
+- [`feature-contract-docs`](feature-contract-docs/SKILL.md): Writes durable feature contracts that model purpose, scope, behavior, invariants, interfaces, implementation model, and verification.
+- [`no-comments`](no-comments/SKILL.md): Explicit cleanup pass over existing comments and suppressions, using [`principles/comment-the-why.md`](principles/comment-the-why.md) as its policy.
+- [`typescript-best-practices`](typescript-best-practices/SKILL.md): TypeScript-specific grounding for the type-system and boundary principles.
+
+## Working style
+
+These stay standalone model-invoked skills because no code-problem router covers them: [`principle-build-the-lever`](principle-build-the-lever/SKILL.md), [`principle-experience-first`](principle-experience-first/SKILL.md), [`principle-guard-the-context-window`](principle-guard-the-context-window/SKILL.md), and [`principle-never-block-on-the-human`](principle-never-block-on-the-human/SKILL.md).
 
 ## Refactoring
 
 - [`untangle-codebase`](untangle-codebase/SKILL.md): Runs a whole-codebase refactor in one pass so agents read less per change, break less silently, and debug faster. Invoke explicitly; it does not auto-trigger. Vendored from [caldoai/skills](https://github.com/caldoai/skills/tree/main/skills/untangle-codebase).
 
-## Explanation
+## Explanation and writing
 
+- [`how`](how/SKILL.md), [`why`](why/SKILL.md), and [`teach`](teach/SKILL.md): explain how code works, why it is that way, and both together. [`bro`](bro/SKILL.md) restates the last message in plain language.
+- [`librarian`](librarian/): Source-backed research across local and remote codebases, with one adapter per harness under `claude/`, `codex/`, and `opencode/`.
 - [`show-me`](show-me/SKILL.md): Explains the current topic visually with the smallest fitting view: pseudocode, trees, Mermaid diagrams, diffs, or focused HTML artifacts. Vendored from [humanlayer/skills](https://github.com/humanlayer/skills) at `3c262914`.
+- [`technical-writing`](technical-writing/SKILL.md), [`unslop`](unslop/SKILL.md), [`commit-description-writing`](commit-description-writing/SKILL.md), [`pr-description-writing`](pr-description-writing/SKILL.md): prose standards.
 
-## Pstack skills
-
-The `how`, `why`, `teach`, `technical-writing`, `unslop`, `typescript-best-practices`, `no-comments`, and `principle-*` skills hold the remaining pstack investigation, writing, and design rules.
-
-These skills were ported from [Cursor's pstack collection](https://github.com/cursor/plugins/tree/main/pstack/skills). Cursor-only paths, metadata, tool arguments, model identifiers, review-bot behavior, and plugin dependencies were replaced with harness-neutral capability checks and fallbacks.
-
-`tdd` and `make-bot-ui` are intentionally excluded.
+`how`, `why`, `teach`, `technical-writing`, `unslop`, `typescript-best-practices`, `no-comments`, and the principles were ported from [Cursor's pstack collection](https://github.com/cursor/plugins/tree/main/pstack/skills), with Cursor-only paths, metadata, and dependencies replaced by harness-neutral fallbacks.
 
 ## References
 
-Some skills include deeper guidance under `references/`, executable helpers under `scripts/`, or workflow-specific playbooks. The code-quality specialists keep theirs in `references/implementation-heuristics.md`. Load only the resources named by the active skill.
+Some skills include deeper guidance under `references/` or helper scripts under `scripts/`. Load only the resources named by the active skill.

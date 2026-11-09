@@ -43,10 +43,8 @@ starting point.
 
 - When writing the purpose and scope, call the Skill tool with
   `principle-experience-first`.
-- When naming the feature's concepts and states, call the Skill tool with
-  `principle-model-the-domain`.
-- When writing the verification section, call the Skill tool with
-  `principle-prove-it-works`.
+- When naming the feature's concepts and states, read `principles/model-the-domain.md`.
+- When writing the verification section, read `principles/prove-it-works.md`.
 
 ## Heuristics
 
