@@ -11,6 +11,8 @@ Before writing the code, read each principle whose condition matches the work. T
 |---|---|
 | Sequencing an addition, refactor, or rewrite | `principles/subtract-before-you-add.md` |
 | Integrating a new requirement into an existing design | `principles/redesign-from-first-principles.md` |
+| An `if` for one value, a one-caller parameter, a swallowed error, a sleep, or a disabled test | `principles/special-cases-are-requirements.md` |
+| A change that lands in several places, or code that must change together but lives apart | `principles/group-by-reason-to-change.md` |
 | Introducing a new internal API while old callers still exist | `principles/migrate-callers-then-delete-legacy-apis.md` |
 | A planned rewrite or migration with phase boundaries | `principles/outcome-oriented-execution.md` |
 | A growing diff, or the urge to add layers or thread a signal | `principles/laziness-protocol.md` |

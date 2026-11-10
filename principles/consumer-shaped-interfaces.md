@@ -9,6 +9,7 @@ An interface exists for its caller. Define it from what the consumer calls, not 
 **The pattern:**
 - Expose only what the consumer needs.
 - Split an interface instead of adding a boolean flag that switches it between unrelated behaviors.
+- Keep one caller's vocabulary out of a general function. A parameter only one workflow understands ties the function to that workflow's changes; move the decision to the caller.
 - If adding one provider method would force edits in unrelated consumers, the interface is too wide. Split it before adding the method.
 - A layer that only forwards calls is shallow; call through it directly. Add a layer only when it owns policy, narrows a type, manages a lifecycle, or adapts a boundary.
 

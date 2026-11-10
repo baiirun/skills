@@ -10,6 +10,8 @@ Before writing the code, read each principle whose condition matches the work. T
 | When the work involves | Read |
 |---|---|
 | Choosing core types and module layout before logic | `principles/foundational-thinking.md` |
+| Deciding what shares a module, file, or folder, or a change that lands in several places | `principles/group-by-reason-to-change.md` |
+| Adding an import, deciding which side owns a type, or an import cycle | `principles/depend-on-what-changes-less.md` |
 | Logic that branches a lot or repeats a shape assumption | `principles/model-the-domain.md` |
 | Placing branches, splitting functions, or writing an operation over many items | `principles/push-ifs-up-fors-down.md` |
 | Adding or changing an interface, extracting a helper, or supplying a dependency | `principles/consumer-shaped-interfaces.md` |

@@ -36,10 +36,12 @@ When one rule is all the work needs, read the principle directly instead of load
 | Code that can fail: external calls, I/O, parsing, jobs, handlers | `principles/classify-failures.md` |
 | Source comments, workaround notes, or commented-out code | `principles/comment-the-why.md` |
 | Adding or changing an interface, extracting a helper, or supplying a dependency | `principles/consumer-shaped-interfaces.md` |
+| Adding an import, deciding which side owns a type, or auditing a dependency graph | `principles/depend-on-what-changes-less.md` |
 | Writing the same instruction a second time, or a recurring correction | `principles/encode-lessons-in-structure.md` |
 | A novel interaction or architectural decision with no precedent | `principles/exhaust-the-design-space.md` |
 | Debugging | `principles/fix-root-causes.md` |
 | Choosing core types and data structures before writing logic | `principles/foundational-thinking.md` |
+| Deciding what shares a module, file, or folder, or a change that lands in several places | `principles/group-by-reason-to-change.md` |
 | A growing diff, or the urge to add layers, abstractions, or signal threading | `principles/laziness-protocol.md` |
 | Commands, lifecycle steps, or loops that run amid crashes, restarts, and retries | `principles/make-operations-idempotent.md` |
 | A new internal API while old callers still exist | `principles/migrate-callers-then-delete-legacy-apis.md` |
@@ -55,6 +57,7 @@ When one rule is all the work needs, read the principle directly instead of load
 | Concurrent actors that might write the same file, branch, key, or state | `principles/separate-before-serializing-shared-state.md` |
 | Business decisions mixed with mutable state, I/O, caching, or scheduling | `principles/separate-logic-state-and-effects.md` |
 | Multi-step work, or stacking commits and PRs | `principles/sequence-verifiable-units.md` |
+| An `if` for one value, a one-caller parameter, a swallowed error, a sleep, or a disabled test | `principles/special-cases-are-requirements.md` |
 | Sequencing an addition, refactor, or rewrite | `principles/subtract-before-you-add.md` |
 | Designing for testability, or writing and reviewing tests | `principles/test-behavior.md` |
 | Deciding which tests a change needs and at which level | `principles/test-what-you-would-reject.md` |

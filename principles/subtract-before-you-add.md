@@ -11,6 +11,8 @@ Make simplification a continual investment. Leave the design slightly simpler an
 **The pattern:**
 - Sequence removal before construction
 - Cut before you polish (get to the minimum before investing in quality)
+- Delete dead code: if nothing uses it, nothing will ever need it to change
+- Remove extension points, flags, and config for things that never vary
 - Design for observed usage, not speculative edge cases
 - No speculative validators, parsers, or guards beyond what the spec demands
 - Out-of-spec features drag validators behind them. Persistence, retry-on-startup, and schema migration each need guards to defend their inputs.
