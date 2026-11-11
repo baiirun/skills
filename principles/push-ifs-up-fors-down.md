@@ -13,6 +13,7 @@
 - When splitting a large function, move non-branching work into helpers first and keep the branch structure in the parent.
 - Carry a decision across functions as an enum or variant only when the state crosses a durable boundary. A variant made in one function only to be matched in the next is a branch that belongs in one place.
 - Keep branching below the callers when pushing it up would copy policy into many callers or expose private details. The goal is control flow you can check in one place.
+- When the branching is spread across callbacks, handlers, or hooks rather than across functions, see [centralize-control-flow](centralize-control-flow.md).
 
 **Fors down:**
 - Write the operation over the collection when callers commonly loop over it.

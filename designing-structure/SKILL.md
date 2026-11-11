@@ -14,6 +14,7 @@ Before writing the code, read each principle whose condition matches the work. T
 | Adding an import, deciding which side owns a type, or an import cycle | `principles/depend-on-what-changes-less.md` |
 | Logic that branches a lot or repeats a shape assumption | `principles/model-the-domain.md` |
 | Placing branches, splitting functions, or writing an operation over many items | `principles/push-ifs-up-fors-down.md` |
+| Wiring callbacks, handlers, hooks, or middleware, or when order depends on registration | `principles/centralize-control-flow.md` |
 | Adding or changing an interface, extracting a helper, or supplying a dependency | `principles/consumer-shaped-interfaces.md` |
 | Code that is hard to trace: layers, wrappers, hidden state | `principles/minimize-reader-load.md` |
 | Abstracting early, a growing diff, or threading a new signal through layers | `principles/laziness-protocol.md` |

@@ -52,6 +52,7 @@ When one rule is all the work needs, read the principle directly instead of load
 | A planned rewrite or migration with explicit phases | `principles/outcome-oriented-execution.md` |
 | Finishing a task, before declaring it done | `principles/prove-it-works.md` |
 | Placing branches, splitting functions, or an operation over many items | `principles/push-ifs-up-fors-down.md` |
+| Wiring callbacks, handlers, hooks, or middleware, or when order depends on registration | `principles/centralize-control-flow.md` |
 | Integrating a new requirement into an existing design | `principles/redesign-from-first-principles.md` |
 | Adding a retry, a fallback, or default behavior on failure | `principles/safe-retries-and-fallbacks.md` |
 | Concurrent actors that might write the same file, branch, key, or state | `principles/separate-before-serializing-shared-state.md` |
